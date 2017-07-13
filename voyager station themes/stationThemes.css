@@ -1,0 +1,202 @@
+body{
+  background-color:black;
+  color:white;
+  overflow: hidden;
+  font-family: "Swiss911 UCm BT";
+  src: url(./public/font.TTF);
+}
+
+#contentArea{
+  position: absolute;
+  top: 8%;
+  left: 20%;
+  width: 78%;
+  height: 83.5%;
+}
+.button{
+	width: 200px;
+	height: 10px;
+	background-color:#426452;
+	text-align: center;
+	cursor:pointer;
+	padding: 20px;
+	border-radius: 20px;
+}
+.button:hover{
+	opacity: .8;
+}
+
+.textBox{
+  font-family: 'Swiss911 UCm BT';
+  font-size: 26px;
+  text-transform: uppercase;
+  background-color: white;
+}
+.textArea{
+ resize: none;
+ font-family: 'Swiss911 UCm BT';
+ font-size: 26px;
+ background-color: darkgrey;
+ text-transform: uppercase;
+}
+.fillWidth{
+  width:100%;
+}
+
+.curveBoxItem{
+  cursor: pointer;
+  background-color: #202020;
+}
+.curveBoxItem:hover{
+  filter:brightness(240%);
+}
+
+.wideButton{
+  cursor: pointer;
+  border-color:white;
+  border-style: outset;
+  border-width: 1px;
+  background-color: #b3ccff;
+  border-radius: 25px;
+  height: 27px;
+  width:240px;
+  padding-bottom: 5px;
+  padding-top: 5px;
+}
+.wideButton:hover{
+  filter: brightness(1.15);
+  cursor: pointer;
+  box-shadow: 0 0 10px #9ecaed;
+}
+.wideButton:active{
+  opacity: brightness(.50);
+  cursor: grabbing;
+}
+
+.Container1{
+  border-image-source: url("/container1");
+  border-image-slice: fill 292 262 292 400;
+  border-image-width: 20em;
+  padding-top: 35px;
+  padding-left: 55px;
+  padding-bottom: 35px;
+}
+
+.trainingBox{
+  position: absolute;
+  border-style: solid;
+  border-width: 1px;
+  border-radius: 5px;
+  box-shadow: 0 0 10px #9ecaed;
+  border-color:white;
+  padding: 30px;
+  font-family: 'Arial';
+  color:white;
+  background-color:rgba(0,0,0,.9);
+  padding-bottom: 80px;
+}
+
+.trainingHeader{
+  font-size: 32px;
+}
+
+.trainingBody{
+  font-size: 22px;
+}
+
+.trainingNextButton{
+  position: absolute;
+  bottom: 10px;
+  right:10px;
+  width: 20%;
+  max-width: 125px;
+  height: 30px;
+  background-color: #4ccfff;
+  box-shadow: 0 0 10px #9ecaed;
+  border-radius: 10px;
+  padding: 10px;
+  text-align: center;
+}
+.trainingNextButton:hover{
+
+  filter: brightness(1.15);
+  cursor: pointer;
+  box-shadow: 0 0 20px #9ecaed;
+}
+
+.trainingWarning{
+  color: #ef696b;
+  text-decoration: bold;
+}
+
+.trainingInstruction{
+  color: #4ccfff;
+  text-decoration: bold;
+}
+
+.trainingInformation{
+  color: #afafaf;
+}
+
+.trainingPreviousButton{
+  position: absolute;
+  bottom: 10px;
+  left:10px;
+  width: 20%;
+  max-width: 125px;
+  height: 30px;
+  background-color: #ef696b;
+  box-shadow: 0 0 10px #9ecaed;
+  border-radius: 10px;
+  padding: 10px;
+  text-align: center;
+}
+.trainingPreviousButton:hover{
+
+  filter: brightness(1.15);
+  cursor: pointer;
+  box-shadow: 0 0 20px #9ecaed;
+}
+
+.topCurve{
+  height: 20px;
+  border-radius: 10px 10px 0px 0px;
+  background-color:rgb(151,154,251);
+}
+.bottomCurve{
+  height: 20px;
+  border-radius: 0px 0px 10px 10px;
+  background-color:rgb(151,154,251);
+}
+
+.noselect {
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: -moz-none;
+    -o-user-select: none;
+    user-select: none;
+}
+/*
+#InterstellarThemer-topBar{
+  border-image-source: url(./public/topbar.png);
+  border-image-slice: fill 60 130 60 140;
+  border-image-width: 2em;
+  font-size: 30px;
+  height: 27px;
+  position: absolute;
+  width:95%;
+  left:2.5%;
+  z-index: 2;
+}
+#InterstellarThemer-bottomBar{
+  border-image-source: url(./public/topbar.png);
+  border-image-slice: fill 60 130 60 140;
+  border-image-width: 2em;
+  font-size: 30px;
+  height: 27px;
+  position: absolute;
+  width:95%;
+  left:2.5%;
+  z-index: 2;
+  bottom: 2.5%;
+}*/

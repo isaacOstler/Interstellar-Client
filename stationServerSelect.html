@@ -1,0 +1,524 @@
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<!DOCTYPE html>
+<html>
+<head>
+	<style>
+   body{
+    overflow: hidden;
+    font-family: 'Arial';
+    color:white;
+    font-size: 16px;
+    background: linear-gradient(#202020, black);
+  }
+  #textValue{
+    font-size: 32px;
+  }
+  #text{
+    position: absolute;
+    top:0px;
+    left:0px;
+    width: 100%;
+    height: 50px;
+    padding-top: 15px;
+    background-color:#335996;
+  }
+  #contentArea{
+    position: absolute;
+    top:50px;
+    width: 90%;
+    left:5%;
+    padding-top: 40px;
+  }
+  #launchButton{
+   outline: none;
+   width: 100%;
+   height: 20px;
+   background-color:white;
+   animation:glow 1s linear infinite;
+   text-transform: uppercase;
+ }
+ #timeUntilAutoLaunch{
+  font-size: 10px;
+  color:#808080;
+}
+.button:hover{
+  filter: invert(0.7);
+}
+.button:active{
+  filter: invert(0.3);
+}
+#gearIcon{
+  cursor: pointer;
+  position: absolute;
+  top:10px;
+  right: 10px;
+  width:12px;
+  height: 12px;
+  z-index: 5;
+  background: url('data:image/svg+xml;base64,PHN2ZyBpZD0iaWNvbi1nZWFyIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB4PSIwcHgiIHk9IjBweCIgdmlld0JveD0iMCAwIDEyMCAxMjAiIHhtbDpzcGFjZT0icHJlc2VydmUiPg0KPHBhdGggZmlsbD0iIzAxMDEwMSIgZD0iTTExNC4yNTEsNzAuNzMxYzIuMjExLDAsNC4yNzEtMS43OTMsNC41NzItMy45ODVjMCwwLDAuNDIyLTMuMDgxLDAuNDIyLTYuNzQ1cy0wLjQyMi02Ljc0NS0wLjQyMi02Ljc0NQ0KCWMtMC4zMDQtMi4xOTMtMi4zNjEtMy45ODYtNC41NzItMy45ODZoLTExLjQzM2MtMi4yMTQsMC00LjUxMi0xLjQxMS01LjEwNi0zLjEzNXMtMS40MTQtNy4yNTUsMC4xNTEtOC44MTlsOC4wOC04LjA4MQ0KCWMxLjU2NC0xLjU2NSwxLjY4Ni00LjIzNiwwLjI2OS01LjkzN2wtOS41MDctOS41MWMtMS43MDEtMS40MTgtNC4zNzEtMS4yOTgtNS45MzgsMC4yNjhsLTguMDgsOC4wODENCgljLTEuNTY0LDEuNTY2LTQuMTczLDIuMTk2LTUuNzkzLDEuNDAyYy0xLjYyLTAuNzk0LTYuMTYzLTQuMTQzLTYuMTYzLTYuMzU2VjUuNzVjMC0yLjIxMy0xLjc5NC00LjI3MS0zLjk4NS00LjU3Mg0KCWMwLDAtMy4wODEtMC40MjQtNi43NDUtMC40MjRzLTYuNzQ1LDAuNDI0LTYuNzQ1LDAuNDI0Yy0yLjE5MywwLjMwMS0zLjk4OCwyLjM1OS0zLjk4OCw0LjU3MnYxMS40MzMNCgljMCwyLjIxMy0xLjQxLDQuNTExLTMuMTM1LDUuMTA2Yy0xLjcyNSwwLjU5NS03LjI1NSwxLjQxNC04LjgyLTAuMTUxbC04LjA4MS04LjA4MWMtMS41NjUtMS41NjUtNC4yMzYtMS42ODYtNS45MzYtMC4yNjkNCglsLTkuNTA5LDkuNTA5Yy0xLjQxOCwxLjcwMS0xLjI5OCw0LjM3MSwwLjI2OCw1LjkzN2w4LjA4LDguMDgxYzEuNTY1LDEuNTY1LDIuMTk3LDQuMTcyLDEuNDAyLDUuNzkyDQoJYy0wLjc5NSwxLjYyLTQuMTQzLDYuMTYzLTYuMzU2LDYuMTYzSDUuNzVjLTIuMjEzLDAtNC4yNzEsMS43OTQtNC41NzMsMy45ODZjMCwwLTAuNDI0LDMuMDgxLTAuNDI0LDYuNzQ0DQoJYzAsMy42NjUsMC40MjQsNi43NDQsMC40MjQsNi43NDRjMC4zMDEsMi4xOTQsMi4zNTksMy45ODcsNC41NzMsMy45ODdoMTEuNDMzYzIuMjEzLDAsNC41MTEsMS40MDksNS4xMDUsMy4xMzUNCgljMC41OTUsMS43MjUsMS40MTQsNy4yNTQtMC4xNTIsOC44MThsLTguMDgsOC4wODFjLTEuNTY1LDEuNTY1LTEuNjg2LDQuMjM2LTAuMjY4LDUuOTM4bDkuNTA4LDkuNTA5DQoJYzEuNzAxLDEuNDE3LDQuMzcsMS4yOTksNS45MzYtMC4yNjlsOC4wODEtOC4wOGMxLjU2NS0xLjU2NCw0LjE3Mi0yLjE5NSw1Ljc5My0xLjQwMWMxLjYyMSwwLjc5NCw2LjE2Miw0LjE0Myw2LjE2Miw2LjM1NXYxMS40MzMNCgljMCwyLjIxMiwxLjc5NCw0LjI3LDMuOTg4LDQuNTdjMCwwLDMuMDgsMC40MjQsNi43NDUsMC40MjRjMy42NjUsMCw2Ljc0NS0wLjQyNCw2Ljc0NS0wLjQyNGMyLjE5My0wLjMwMSwzLjk4NS0yLjM1OCwzLjk4NS00LjU3DQoJdi0xMS40MzNjMC0yLjIxMywxLjQxMS00LjUxMiwzLjEzNi01LjEwNmMxLjcyNi0wLjU5NSw3LjI1Ni0xLjQxMyw4LjgyLDAuMTUxbDguMDgsOC4wODFjMS41NjUsMS41NjMsNC4yMzYsMS42ODYsNS45MzgsMC4yNjgNCglsOS41MDctOS41MDZjMS40MTctMS43MDEsMS4yOTktNC4zNy0wLjI2OS01LjkzOGwtOC4wOC04LjA4Yy0xLjU2NS0xLjU2NC0yLjE5Ny00LjE3Mi0xLjQwMS01Ljc5Mw0KCWMwLjc5NC0xLjYyLDQuMTQzLTYuMTYzLDYuMzU1LTYuMTYzSDExNC4yNTF6IE02MCw4MS42ODdjLTExLjk3NywwLTIxLjY4Ni05LjcwNy0yMS42ODYtMjEuNjg3DQoJYzAtMTEuOTc2LDkuNzA5LTIxLjY4NiwyMS42ODYtMjEuNjg2YzExLjk3NywwLDIxLjY4Nyw5LjcwOSwyMS42ODcsMjEuNjg2QzgxLjY4Nyw3MS45NzcsNzEuOTc3LDgxLjY4Nyw2MCw4MS42ODd6Ii8+DQo8L3N2Zz4=') no-repeat center center / 100%;
+}
+@keyframes glow { 
+  0% { 
+    background-color:rgb(255,255,255);
+  }
+  50% {
+    background-color:rgb(255, 128, 128);
+    box-shadow: 0 0 15px rgb(255, 0, 0);
+  }
+  100% {
+    background-color:rgb(255,255,255);
+  }
+
+}
+
+#returnIcon{
+  z-index: 5;
+  position: absolute;
+  top:10px;
+  right: 20px;
+  font-size: 15px;
+  cursor:pointer;
+}
+#returnIcon:hover{
+  filter: invert(0.7);
+}
+#returnIcon:active{
+  filter: invert(0.3);
+}
+
+.animationStripes{
+  width: 300px;
+  height: 50px;
+  background-size: 150% 100%;
+  background-image: repeating-linear-gradient( -55deg, #222, #222 10px, #252525 10px, #252525 20px );
+  -webkit-animation:progress 2s linear infinite;
+  -moz-animation:progress 2s linear infinite;
+  -ms-animation:progress 2s linear infinite;
+  animation:progress 2s linear infinite;
+}
+.loginFailure{
+  animation: loginFailure 2s 1;
+}
+@keyframes progress{
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: -70px 0px;
+  }
+} 
+@keyframes loginFailure{
+  0% {
+    color:white;
+  }
+  10% {
+    color:red;
+  }
+  100% {
+    color:white;
+  }
+} 
+
+#settings{
+  position: absolute;
+  top:0px;
+  left: 0px;
+  width:100%;
+  height: 100%;
+  background-color: black;
+  color: white;
+  display: none;
+  z-index: 15;
+  padding: 5px;
+}
+#adminLoginBox{
+  cursor: pointer;
+  position: absolute;
+  background-color: #999999;
+  color:black;
+  width: 10%;
+  top:40%;
+  height: 20%;
+  font-size: 12vw;
+  right: 10%;
+  padding-left: 5px;
+  text-align: center;
+}
+
+.noselect {
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: -moz-none;
+  -o-user-select: none;
+  user-select: none;
+}
+
+#lockIcon{
+  animation-duration: 2s;
+}
+
+#settingsContainer{
+  color:white;
+  position: absolute;
+  top:0px;
+  left: 0px;
+  width:100%;
+  height: 100%;
+  background-color: #2d2d2d;
+  display: none;
+}
+#settingsContainer{
+  padding: 10px;
+  font-size: 18px;
+}
+#resetButton{
+  position: absolute;
+  top: 1%;
+  right: 12%;
+  text-align: center;
+  cursor: pointer;
+  width: 37%;
+  height: 20%;
+  font-size: 22px;
+  border: solid 1px white;
+  background-color: #42c5f4;
+}
+.verticalAlign{
+  /* Safari, Opera, and Chrome */
+  display:-webkit-box;
+  -webkit-box-pack:center;
+  -webkit-box-align:center;
+}
+#resetButton:hover{
+  filter: brightness(1.25);
+}
+#resetButton:active{
+  filter: brightness(.65);
+}
+#oldPasswordContainer{
+  position: absolute;
+  bottom: 94px;
+  right: 36px;
+  width: 58%;
+  text-align: right;
+}
+#newPasswordContainer{
+  position: absolute;
+  bottom: 74px;
+  right: 36px;
+  width: 58%;
+  text-align: right;
+}
+#confirmPasswordContainer{
+  position: absolute;
+  bottom: 54px;
+  right: 36px;
+  width: 64%;
+  text-align: right;
+}
+#resetPasswordButton{
+  position: absolute;
+  bottom: 32px;
+  right: 36px;
+  width: 27%;
+}
+#flightTakeoffIcon {
+  position: absolute;
+  top:10%;
+  height: 80%;
+  width: 40%;
+  font-size: 7vw;
+  left: 5%;
+}
+#relaunchTag{
+  position: absolute;
+  top:10%;
+  height: 80%;
+  width: 70%;
+  font-size: 7vw;
+  right: 10%;
+}
+</style>
+<title>INTERSTELLAR</title>
+</head>
+<body>
+  <div id="settings" class="animationStripes">
+    <i class="material-icons" id="returnIcon" class="noselect">call_missed</i>
+    <div id="settingsContainer">
+      Server <input type="text" id="serverAddressTextbox" style="font-size: 14px;height: 20px;width: 105px;" placeholder="localhost">:<input type="text" id="serverPortTextbox" style="font-size: 14px;height: 20px;width: 50px;" maxlength="5">
+      <div id="resetButton" class="verticalAlign">
+        <div id="relaunchTag">Relaunch</div> <svg style="width:10%;height:90%" id="flightTakeoffIcon" viewBox="0 0 24 24">
+        <path fill="white" d="M2.81,14.12L5.64,11.29L8.17,10.79C11.39,6.41 17.55,4.22 19.78,4.22C19.78,6.45 17.59,12.61 13.21,15.83L12.71,18.36L9.88,21.19L9.17,17.66C7.76,17.66 7.76,17.66 7.05,16.95C6.34,16.24 6.34,16.24 6.34,14.83L2.81,14.12M5.64,16.95L7.05,18.36L4.39,21.03H2.97V19.61L5.64,16.95M4.22,15.54L5.46,15.71L3,18.16V16.74L4.22,15.54M8.29,18.54L8.46,19.78L7.26,21H5.84L8.29,18.54M13,9.5A1.5,1.5 0 0,0 11.5,11A1.5,1.5 0 0,0 13,12.5A1.5,1.5 0 0,0 14.5,11A1.5,1.5 0 0,0 13,9.5Z" />
+      </svg>
+    </div><br />
+    <div id="oldPasswordContainer">Old Password: <input type="password" id="oldPasswordTextbox"></div>
+    <div id="newPasswordContainer">New Password: <input type="password" id="newPasswordTextbox"></div>
+    <div id="confirmPasswordContainer">Confirm Password: <input type="password" id="confirmPasswordTextbox"></div>
+    <input type="button" value="Change Password" disabled="disabled" id="resetPasswordButton">
+  </div>
+  <div id="adminLoginContainer">
+    <span style="font-size:4vw;position: absolute;top:15%;right: 10%;text-align: center;width:57%"><b>Administrator Login Required</b></span>
+    <i id="lockIcon" class="material-icons" style="position: absolute;top:10%;left: 5%;font-size: 30vw;">lock</i>
+    <input type="password" id="adminPasswordBox" style="position: absolute;width: 46%;top:40%;height: 20%;font-size: 6vw;right: 21%;padding-left: 5px;">
+    <div id="adminLoginBox" class="button noselect">
+      <i class="material-icons" style="position: absolute;top:10px;right: 20px;font-size: 5vw">input</i>
+    </div>
+  </div>
+</div>
+<div id="gearIcon" class="button noselect"></div>
+<div id="text">
+ <CENTER id="textValue" class="noselect">
+  STATIONS SETUP:
+</CENTER>
+</div>
+<div id="contentArea">
+  <form id="stationLaunchForm">
+   <center>
+    STATION: <select style="width:70%" id="stationSelect" value="NO STATIONS FOUND!">
+  </select>
+  <br />
+  <br />
+  <input type="submit" id="launchButton" value="CANNOT LAUNCH!" autofocus="true">
+  <br /><span id="timeUntilAutoLaunch"></span>
+</center>
+</form>
+</div>
+
+<!-- Insert this line above script imports  -->
+<script>if (typeof module === 'object') {window.module = module; module = undefined;}</script>
+
+<!-- normal script imports etc  -->
+<script src="./node_modules/jquery/dist/jquery.min.js"></script>
+<!-- Insert this line after script imports -->
+<script>if (window.module) module = window.module;</script>
+
+
+<script>
+  var ipc = require('electron').ipcRenderer;
+
+/*
+  ipc.send("setAdminPassword","rommel1942!!! Yes");
+    ipc.once("adminPasswordDidWrite",function(event){
+      ipc.send("getAdminPassword");
+      ipc.once("recieveAdminPassword",function(event, password){
+      alert(password);
+    });
+  });
+  */
+
+  var serverAddress = "localhost";
+  var serverPort = 3000;
+  var timePassed = 0;
+  var timeRequired = 15;
+  var autoLaunchTimer = undefined;
+
+  ipc.send("autoStartTimer");
+  ipc.once("autoLaunchTimeRecieved",function(event, data){
+    if(data != null){
+      timeRequired = data;
+      autoLaunchTimer = setInterval(function(){
+        timePassed++;
+        if((timeRequired - timePassed) <= 6){
+          $("#timeUntilAutoLaunch").html("Time until auto launch: " + (timeRequired - timePassed) + " seconds... Change screen to abort...");
+          if((timeRequired - timePassed) <= 3){
+            $("#timeUntilAutoLaunch").css("color","red");
+          }
+        }else{
+          $("#timeUntilAutoLaunch").html("Time until auto launch: " + (timeRequired - timePassed) + " seconds...");
+        }
+        if(timePassed >= timeRequired){
+          if(autoLaunchTimer != undefined){
+            clearInterval(autoLaunchTimer);
+            autoLaunchTimer = undefined;
+          }
+          var stationSelected = $('#stationSelect :selected').text();
+      //send an ipc action alerting index.js that this station has been selected
+      ipc.send('loginStation', stationSelected);
+    }
+  },1000);
+    }
+  });
+
+  $("#resetPasswordButton").on("click",function(event){
+    ipc.send("setAdminPassword",$("#newPasswordTextbox").val());
+    $("#newPasswordContainer").val("");
+    $("#oldPasswordContainer").val("");
+    $("#confirmPasswordContainer").val("");
+    $("#oldPasswordContainer").css("color","white");
+    $("#newPasswordContainer").css("color","lime");
+    $("#confirmPasswordContainer").css("color","white");
+  });
+
+  $("#oldPasswordContainer").on("keypress",function(event){
+    ipc.send("getAdminPassword");
+    ipc.once("recieveAdminPassword",function(event, password){
+      var passwordAttempt = $("#oldPasswordTextbox").val();
+      if(password == passwordAttempt){
+        $("#oldPasswordContainer").css("color","lime");
+      }else{
+        $("#oldPasswordContainer").css("color","red");
+      }
+      setChangePasswordButtonAvalibility();
+    });
+  });
+
+  $("#newPasswordTextbox").on("keyup",function(event){
+    if(passwordBoxesDoMatch()){
+      $("#newPasswordContainer").css("color","lime");
+      $("#confirmPasswordContainer").css("color","lime");
+    }else{
+      $("#confirmPasswordContainer").css("color","red");
+    }
+    setChangePasswordButtonAvalibility();
+  });
+
+  function setChangePasswordButtonAvalibility(){
+    ipc.send("getAdminPassword");
+    ipc.once("recieveAdminPassword",function(event, password){
+      var passwordAttempt = $("#oldPasswordTextbox").val();
+      if(password == passwordAttempt && passwordBoxesDoMatch()){
+       $("#resetPasswordButton").prop('disabled', false);
+     }else{
+       $("#resetPasswordButton").prop('disabled', true);
+     }
+   });
+  }
+
+  $("#confirmPasswordTextbox").on("keyup",function(event){
+    if(passwordBoxesDoMatch()){
+      $("#newPasswordContainer").css("color","lime");
+      $("#confirmPasswordContainer").css("color","lime");
+    }else{
+      $("#confirmPasswordContainer").css("color","red");
+    }
+    setChangePasswordButtonAvalibility();
+  });
+
+  function passwordBoxesDoMatch(){
+    return ($("#newPasswordTextbox").val() == $("#confirmPasswordTextbox").val()) && ($("#newPasswordTextbox").val() != "" && $("#confirmPasswordTextbox").val() != "");
+  }
+
+  $("#gearIcon").on("click",function(event){
+    if(autoLaunchTimer != undefined){
+      clearInterval(autoLaunchTimer);
+      autoLaunchTimer = undefined;
+    }
+    $("#adminPasswordBox").focus();
+    $("#adminPasswordBox").off();
+    $("#adminPasswordBox").keypress(function(event){
+      if(event.keyCode == 13){
+        loginAdmin(event.target.value);
+      }
+    });
+    $("#adminLoginBox").off();
+    $("#adminLoginBox").click(function(event){
+      loginAdmin($("#adminPasswordBox").val());
+    });
+    $("#settings").fadeIn();
+  })
+  $("#returnIcon").on("click",function(event){
+    $("#settings").fadeOut();
+  })
+  $("#resetButton").on("click",function(event){
+    resetApplicationWithNewSpecifications();
+  })
+
+  function resetApplicationWithNewSpecifications(){
+    ipc.send("setServerAddress",$("#serverAddressTextbox").val());
+    ipc.once("serverAddressDidSet",function(){
+      ipc.send("setServerPort",$("#serverPortTextbox").val());
+      ipc.once("serverPortDidSet",function(){
+        ipc.send("resetApplication");
+      });
+    })
+  }
+
+  function loginAdmin(passwordAttempt){
+    ipc.send("getAdminPassword");
+    ipc.once("recieveAdminPassword",function(event, password){
+      if(password == passwordAttempt){
+        $("#adminLoginContainer").fadeOut();
+        $("#settingsContainer").fadeIn();
+      }else{
+        $("#adminPasswordBox").val("");
+        $("#adminPasswordBox").focus();
+        document.getElementById("lockIcon").style.webkitAnimation = '';
+        setTimeout(function() {
+          document.getElementById("lockIcon").style.webkitAnimation = 'loginFailure 1s 1';
+        }, 10);
+      }
+    });
+  }
+
+  function matchButtonToSelectedStation(){
+    		//find the selected station, put it's name in a variable
+    		var stationSelected = $('#stationSelect :selected').text();
+        	//change the button text to match what is selected
+         $("#launchButton").val("LAUNCH " + stationSelected);
+       }
+
+       $("#stationSelect").change(function(){
+        	//make the button match the selected station
+          matchButtonToSelectedStation();
+    		//set autofocus back on the submit button
+    		$("#launchButton").focus();
+    	});
+       $("#stationSelect").on("change",function(){
+        ipc.send("stationPresetDidChange",$('#stationSelect :selected').text())
+        if(autoLaunchTimer != undefined){
+          clearInterval(autoLaunchTimer);
+          autoLaunchTimer = undefined;
+        }
+        $("#timeUntilAutoLaunch").html("Auto launch aborted");
+        setTimeout(function(){
+          $("#timeUntilAutoLaunch").fadeOut(2000);
+        },3000);
+      })
+       ipc.once("savedStartupStation",function(event, stationName){
+        $('#stationSelect').val(stationName);
+        $("#launchButton").val("LAUNCH " + stationName);
+      });
+       ipc.once("savedServerAddress",function(event, serverAddress){
+        serverAddress = serverAddress;
+        $("#serverAddressTextbox").val(serverAddress);
+      });
+       ipc.once("savedServerPort",function(event, serverPort){
+        serverPort = serverPort;
+        $("#serverPortTextbox").val(serverPort);
+      });
+    	//once the stations have been sent
+    	ipc.once('stationsSent', function(event, response){
+    			//clear all the names off of the stationSelect dropdown menu
+          console.log(response);
+          $("#stationSelect").html();
+    			//use a for loop to cycle through the name of each station
+          $("#stationSelect").append("<optgroup label=\"Core Stations\">");
+          for(var i = 0; i < response.length;i++){
+            if(response[i].stationType == "core")
+              $("#stationSelect").append("<option>" + response[i].stationInfo.name + "</option>");
+
+          }
+          $("#stationSelect").append("<optgroup label=\"Bridge Stations\">");
+          for(var j = 0; j < response.length;j++){
+            if(response[j].stationType != "core"){
+              $("#stationSelect").append("<option>" + response[j].stationInfo.name + "</option>");
+              //add this station to the stationSelect dropdown menu
+            }
+          }
+        		//make the button match the selected station
+           matchButtonToSelectedStation();
+         });
+    	ipc.send('grabStations', 'someData');
+
+    	//add a new event listener for when the form is submitted
+      stationLaunchForm.addEventListener('submit', function(submitAction){
+			//find the selectedStation
+      var stationSelected = $('#stationSelect :selected').text();
+    		//send an ipc action alerting index.js that this station has been selected
+        ipc.send('loginStation', stationSelected);
+   			//prevent the default reloading of the page and wait for index.js to load the station
+        submitAction.preventDefault();
+      });
+    </script>
+  </body>
+  </html>

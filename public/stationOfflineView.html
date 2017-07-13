@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<style>
+		body{
+			overflow: hidden;
+			color:red;
+			cursor: not-allowed;
+			background-color: black;
+			font-family: 'arial';
+		}
+		h1{
+			position: absolute;
+			top:10%;
+			left: 2.5%;
+			width: 95%;
+			text-align: center;
+			font-size: 10vw;
+			font-family: 'impact';
+		}
+		#catchAll{
+			position: absolute;
+			top:0px;
+			left: 0px;
+			width: 100%;
+			height: 100%;
+		}
+		#doNotTouchWarning{
+			position: absolute;
+			bottom: 35%;
+			width: 95%;
+			left: 2.5%;
+			text-align: center;
+			font-size: 2vw;
+		}
+		#errorMessages{
+			font-size: 10px;
+			position: absolute;
+			bottom: 10px;
+			vertical-align: bottom;
+			left: 10px;
+			overflow: hidden;
+			max-height: 25%;
+			width: 40%;
+		}
+	</style>
+	<title>STATION</title>
+</head>
+<body>
+	<div id="catchAll">
+
+	</div>
+	<div id="errorMessages">
+	</div>
+	<h1>STATION OFFLINE</h1>
+
+	<br /><br />
+	<p style="position: absolute;top:22%;left: 2.5%;width: 95%;"><center>
+		Please inform the chief engineer that your station has crashed<br />
+		Automatic repair programs are in progress...</center>
+		<br /><br />
+		<div id="doNotTouchWarning"><b>Do not touch your computer until the login screen appears again!</b></div>
+	</p>
+	<!-- Insert this line above script imports  -->
+	<script>if (typeof module === 'object') {window.module = module; module = undefined;}</script>
+
+	<!-- normal script imports etc  -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+	<!-- Insert this line after script imports -->
+	<script>if (window.module) module = window.module;</script>
+	<script>
+var stupidTechMessages = 
+	[
+		{
+			"message" : "shipwide port scan in progress..",
+			"timeBetweenNextMessages" : 10,
+			"nextMessages" :
+			[
+			"PINGING 192.168.0.1","NO REPLY","PINGING 192.168.0.2","NO REPLY","PINGING 192.168.0.3","NO REPLY","PINGING 192.168.0.4","NO REPLY","PINGING 192.168.0.5","NO REPLY","PINGING 192.168.0.6","NO REPLY","PINGING 192.168.0.7","NO REPLY","PINGING 192.168.0.8","NO REPLY","PINGING 192.168.0.9","NO REPLY","PINGING 192.168.0.10","NO REPLY","PINGING 192.168.0.11","NO REPLY","PINGING 192.168.0.12","NO REPLY","PINGING 192.168.0.13","NO REPLY","PINGING 192.168.0.14","NO REPLY","PINGING 192.168.0.15","NO REPLY","PINGING 192.168.0.16","NO REPLY","PINGING 192.168.0.17","NO REPLY","PINGING 192.168.0.18","NO REPLY","PINGING 192.168.0.19","NO REPLY","PINGING 192.168.0.20","NO REPLY","PINGING 192.168.0.21","NO REPLY","PINGING 192.168.0.22","NO REPLY","PINGING 192.168.0.23","NO REPLY","PINGING 192.168.0.24","NO REPLY","PINGING 192.168.0.25","NO REPLY","PINGING 192.168.0.26","NO REPLY","PINGING 192.168.0.27","NO REPLY","PINGING 192.168.0.28","NO REPLY","PINGING 192.168.0.29","NO REPLY","PINGING 192.168.0.30","NO REPLY","PINGING 192.168.0.31","NO REPLY","PINGING 192.168.0.32","NO REPLY","PINGING 192.168.0.33","NO REPLY","PINGING 192.168.0.34","NO REPLY","PINGING 192.168.0.35","NO REPLY","PINGING 192.168.0.36","NO REPLY","PINGING 192.168.0.37","NO REPLY","PINGING 192.168.0.38","NO REPLY","PINGING 192.168.0.39","NO REPLY","PINGING 192.168.0.40","NO REPLY","PINGING 192.168.0.41","NO REPLY","PINGING 192.168.0.42","NO REPLY","PINGING 192.168.0.43","NO REPLY","PINGING 192.168.0.44","NO REPLY","PINGING 192.168.0.45","NO REPLY","PINGING 192.168.0.46","NO REPLY","PINGING 192.168.0.47","NO REPLY","PINGING 192.168.0.48","NO REPLY","PINGING 192.168.0.49","NO REPLY","PINGING 192.168.0.50","NO REPLY","PINGING 192.168.0.51","NO REPLY","PINGING 192.168.0.52","NO REPLY","PINGING 192.168.0.53","NO REPLY","PINGING 192.168.0.54","NO REPLY","PINGING 192.168.0.55","NO REPLY","PINGING 192.168.0.56","NO REPLY","PINGING 192.168.0.57","NO REPLY","PINGING 192.168.0.58","NO REPLY","PINGING 192.168.0.59","NO REPLY","PINGING 192.168.0.60","NO REPLY","PINGING 192.168.0.61","NO REPLY","PINGING 192.168.0.62","NO REPLY","PINGING 192.168.0.63","NO REPLY","PINGING 192.168.0.64","NO REPLY","PINGING 192.168.0.65","NO REPLY","PINGING 192.168.0.66","NO REPLY","PINGING 192.168.0.67","NO REPLY","PINGING 192.168.0.68","NO REPLY","PINGING 192.168.0.69","NO REPLY","PINGING 192.168.0.70","NO REPLY","PINGING 192.168.0.71","NO REPLY","PINGING 192.168.0.72","NO REPLY","PINGING 192.168.0.73","NO REPLY","PINGING 192.168.0.74","NO REPLY","PINGING 192.168.0.75","NO REPLY","PINGING 192.168.0.76","NO REPLY","PINGING 192.168.0.77","NO REPLY","PINGING 192.168.0.78","NO REPLY","PINGING 192.168.0.79","NO REPLY","PINGING 192.168.0.80","NO REPLY","PINGING 192.168.0.81","NO REPLY","PINGING 192.168.0.82","NO REPLY","PINGING 192.168.0.83","NO REPLY","PINGING 192.168.0.84","NO REPLY","PINGING 192.168.0.85","NO REPLY","PINGING 192.168.0.86","NO REPLY","PINGING 192.168.0.87","NO REPLY","PINGING 192.168.0.88","NO REPLY","PINGING 192.168.0.89","NO REPLY","PINGING 192.168.0.90","NO REPLY","PINGING 192.168.0.91","NO REPLY","PINGING 192.168.0.92","NO REPLY","PINGING 192.168.0.93","NO REPLY","PINGING 192.168.0.94","NO REPLY","PINGING 192.168.0.95","NO REPLY","PINGING 192.168.0.96","NO REPLY","PINGING 192.168.0.97","NO REPLY","PINGING 192.168.0.98","NO REPLY","PINGING 192.168.0.99","NO REPLY","PINGING 192.168.0.100","NO REPLY","PINGING 192.168.0.101","NO REPLY","PINGING 192.168.0.102","NO REPLY","PINGING 192.168.0.103","NO REPLY","PINGING 192.168.0.104","NO REPLY","PINGING 192.168.0.105","NO REPLY","PINGING 192.168.0.106","NO REPLY","PINGING 192.168.0.107","NO REPLY","PINGING 192.168.0.108","NO REPLY","PINGING 192.168.0.109","NO REPLY","PINGING 192.168.0.110","NO REPLY","PINGING 192.168.0.111","NO REPLY","PINGING 192.168.0.112","NO REPLY","PINGING 192.168.0.113","NO REPLY","PINGING 192.168.0.114","NO REPLY","PINGING 192.168.0.115","NO REPLY","PINGING 192.168.0.116","NO REPLY","PINGING 192.168.0.117","NO REPLY","PINGING 192.168.0.118","NO REPLY","PINGING 192.168.0.119","NO REPLY","PINGING 192.168.0.120","NO REPLY","PINGING 192.168.0.121","NO REPLY","PINGING 192.168.0.122","NO REPLY","PINGING 192.168.0.123","NO REPLY","PINGING 192.168.0.124","NO REPLY","PINGING 192.168.0.125","NO REPLY","PINGING 192.168.0.126","NO REPLY","PINGING 192.168.0.127","NO REPLY"
+			]
+		},{
+			"message" : "shipwide port scan in progress..",
+			"timeBetweenNextMessages" : 72,
+			"nextMessages" :
+			[
+				"CHECKING EPS SERIAL CONNECTION...",
+				"<span style='color:green'>CONNECTION VALID</span>"
+			]
+		},{
+			"message" : "shipwide port scan in progress..",
+			"timeBetweenNextMessages" : 80,
+			"nextMessages" :
+			[
+				"CHECKING MAIN COMPUTER CONNECTION",
+				"<span style='color:green'>CONNECTION VALID</span>"
+			]
+		},{
+			"message" : "CHECKING MEMORY BANK CONNECTIONS",
+			"timeBetweenNextMessages" : 25,
+			"nextMessages" :
+			[
+				"CHECKING MEMORY BANK ALPHA",
+				"<span style='color:green'>CONNECTION VALID</span>",
+				"CHECKING MEMORY BANK BRAVO",
+				"<span style='color:green'>CONNECTION VALID</span>",
+				"CHECKING MEMORY BANK CHARLIE",
+				"<span style='color:green'>CONNECTION VALID</span>",
+				"CHECKING MEMORY BANK DELTA",
+				"<span style='color:green'>CONNECTION VALID</span>"
+			]
+		},{
+			"message" : "MAIN COMPUTER QUERY...",
+			"timeBetweenNextMessages" : 100,
+			"nextMessages" :
+			[
+				"CHECKING MAIN COMPUTER CONNECTION",
+				"<span style='color:green'>CONNECTION VALID</span>"
+			]
+		},{
+			"message" : "CHECKING HEAP MEMORY",
+			"timeBetweenNextMessages" : 800,
+			"nextMessages" :
+			[
+				"<span style='color:green'>81.2% FREE MEMORY</span>"
+			]
+		},{
+			"message" : "STARTING GARBAGE COLLECTION",
+			"timeBetweenNextMessages" : 2000,
+			"nextMessages" :
+			[
+				"10% COMPLETE",
+				"20% COMPLETE",
+				"30% COMPLETE",
+				"40% COMPLETE",
+				"50% COMPLETE",
+				"60% COMPLETE",
+				"70% COMPLETE",
+				"80% COMPLETE",
+				"90% COMPLETE",
+				"<span style='color:green'>COMPLETE</span>"
+			]
+		},{
+			"message" : "CLEARING ERROR BUFFERS",
+			"timeBetweenNextMessages" : 200,
+			"nextMessages" :
+			[
+				"<span style='color:green'>ERROR BUFFER CLEARED - NO STATION ERRORS FOUND</span>"
+			]
+		}
+	];
+
+		function appendErrorMessage(message){
+			var errorMessagesHTML = document.getElementById("errorMessages").innerHTML;
+			document.getElementById("errorMessages").innerHTML = message.toUpperCase() + "<br />" + errorMessagesHTML;
+		}
+
+		appendErrorMessage("ERROR: CODE 521 - DISCONNECTED FROM MAIN COMPUTER");
+		var attemptToConnectToInternet = setInterval(function(){
+			if(!window.jQuery)
+			{
+				appendErrorMessage("ERROR: CODE 599 - STARFLEET CODE DATABASE ACCESS LOST")
+				printMumboJumbo();
+			}else{
+				clearInterval(attemptToConnectToInternet);
+				appendErrorMessage("<span style='color:green'>STARFLEET CODE DATABASE DETECTED - DOWNLOADING LIBRARIES</span>")
+
+				printMumboJumbo();
+				setTimeout(function(){
+					appendErrorMessage("<span style='color:lime'>COMPLETE</span>")
+				},400);
+				$("#doNotTouchWarning").fadeOut(1000,function(){
+					$("#doNotTouchWarning").fadeIn(1000);
+				});
+				setInterval(function(){
+					$("#doNotTouchWarning").fadeOut(1000,function(){
+						$("#doNotTouchWarning").fadeIn(1000);
+					});
+				},4000);
+			}
+		},1000);
+
+		function getRandomInt(min, max) {
+			min = Math.ceil(min);
+			max = Math.floor(max);
+			return Math.floor(Math.random() * (max - min)) + min;
+		}
+		function printMumboJumbo(messagePassed,nextMessageIndexPassed){
+			if(messagePassed != undefined){
+				if(nextMessageIndexPassed + 1> messagePassed.nextMessages.length){
+					nextMessageIndexPassed = 0;
+					printMumboJumbo();
+				}else{
+					let message = messagePassed;
+					let messageIndex = nextMessageIndexPassed;
+					appendErrorMessage(message.nextMessages[messageIndex]);
+					setTimeout(function(){
+						printMumboJumbo(message,messageIndex + 1);
+					},message.timeBetweenNextMessages + getRandomInt(-50,75));
+				}
+			}else{
+				var messageIndex = getRandomInt(0,stupidTechMessages.length);
+				var message = stupidTechMessages[messageIndex];
+				appendErrorMessage(message.message);
+				if(message.nextMessages.length > 0){
+					setTimeout(function(){
+						printMumboJumbo(message,messageIndex);
+					},message.timeBetweenNextMessages + getRandomInt(-50,75));
+				}
+			}
+		}
+	</script>
+</body>
+</html>
