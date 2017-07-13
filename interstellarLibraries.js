@@ -48,11 +48,7 @@ function onPresetValueChange(valueName,callback){
   		"key" : valueName,
   		"callback" : callback
   	});
-  	let functionCallback = callback;
-  	let valueNamePassed = valueName;
-  	getPresetValue(valueName,function(data){
-  		functionCallback(data);
-  	});
+  	callback(getPresetValue(valueName).value);
 }
 /*
 Function Name : onDatabaseValueChange(valueName,callback(newData){})
@@ -216,16 +212,9 @@ function setPresetValue(key,value,callback){
 		}
 	});
 }
-function getPresetValue(key,callback){
+function getPresetValue(key){
 	var ipcRenderer = require('electron').ipcRenderer;
-	let functionCallback = callback;
-	let keyPassed = key;
-	ipcRenderer.send("getPresetWithKey",keyPassed);
-	ipcRenderer.once("recievePresetWithKey",function(event, data){
-		if(functionCallback != undefined && keyPassed == data.key){
-			functionCallback(data.value);
-		}
-	});
+	return ipcRenderer.sendSync("getPresetWithKey",key);
 }
 
 require('electron').ipcRenderer.on('presetsFileDidChange', (event, message) => {

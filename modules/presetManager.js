@@ -39,7 +39,7 @@ module.exports.init = function(clientIPC,filePath,createdWindow){
 		}else{
 			newValue = newValue;
 		}
-		event.sender.send("recievePresetWithKey",newValue);
+		event.returnValue = newValue;
 	});
 	ipc.on("setPresetWithKey",function(event,data){
 		setPresetWithKey(data.key,data.value,function(){
