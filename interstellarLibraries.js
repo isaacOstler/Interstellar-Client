@@ -11,7 +11,9 @@
  */
 
 
-var InterstellarFramework = function(){
+ var InterstellarFramework = function(){
+
+ 	var coreWidgets = [];
 
 	var databaseListeners = []; //full description of this variable and how it works below
 	/*
@@ -44,14 +46,14 @@ var InterstellarFramework = function(){
 		*/
 
 
-	this.onPresetValueChange = function(valueName,callback){
-	  	console.log("[INTERSTELLAR] presetListener created, watching value " + valueName + " (run callback upon change)");
+		this.onPresetValueChange = function(valueName,callback){
+	  	//console.log("[INTERSTELLAR] presetListener created, watching value " + valueName + " (run callback upon change)");
 	  	presetListeners.push({
 	  		"key" : valueName,
 	  		"callback" : callback
 	  	});
 	  	callback(this.getPresetValue(valueName).value);
-	}
+	  }
 	/*
 	Function Name : onDatabaseValueChange(valueName,callback(newData){})
 	Parameters : (string) valueName, this is the key of the value on the database.  
@@ -64,14 +66,14 @@ var InterstellarFramework = function(){
 			  be passed
 			  */
 
-	this.onDatabaseValueChange = function(valueName,callback){
-	  	console.log("[INTERSTELLAR] databaseListener created, watching value " + valueName + " (run callback upon change)");
+			  this.onDatabaseValueChange = function(valueName,callback){
+	  	//console.log("[INTERSTELLAR] databaseListener created, watching value " + valueName + " (run callback upon change)");
 	  	databaseListeners.push({
 	  		"key" : valueName,
 	  		"callback" : callback
 	  	});
 	  	callback(this.getDatabaseValue(valueName));
-	}
+	  }
 	/*
 	Function Name : setDatabaseValue(valueKey,newData)
 	Parameters : (string) value key, this string will be used to identify the value on the database
@@ -166,7 +168,7 @@ var InterstellarFramework = function(){
 	/*
 		DEPRECIATED!  Use deepCopyArray() instead
 		Function Name : IFDeepCopyArray()
-	*/
+		*/
 
 	/*
 	Function Name : deepCopyArray()
@@ -228,21 +230,310 @@ var InterstellarFramework = function(){
 		return ipcRenderer.sendSync("getPresetWithKey",key);
 	}
 
-	require('electron').ipcRenderer.on('presetsFileDidChange', (event, message) => {
-		for(var i = 0; i < presetListeners.length;i++){
-			if(message.key == presetListeners[i].key){
-				presetListeners[i].callback(message.value);
+	/*
+
+		Name: addCoreWidget();
+		Purpose: Creates a CoreWidget class and keeps track of it, for
+				 resets and who knows what else
+		Takes: String - Widget Name
+			   Custom Class - Code for the widget
+		Returns - The GUID of the widget
+		*/
+
+		this.addCoreWidget = function(name, widgetClass){
+			var widget = new CoreWidget(name,widgetClass);
+			coreWidgets.splice(coreWidgets.length,0,
+			{
+				"name" : name,
+				"widgetClass" : widget
+			});
+			return widget.getWidgetID();
+		}
+
+		function resizeCoreWidget(widgetName,event){
+			for(var i = 0;i < coreWidgets.length;i++){
+				if(coreWidgets[i].name == widgetName){
+					coreWidgets[i].widgetClass.getWidgetCode().onResize(event);
+					return;
+				}
 			}
 		}
-	});
-	require('electron').ipcRenderer.on('databaseValueDidChange', (event, message) => {
-		for(var i = 0; i < databaseListeners.length;i++){
-			if(message.key == databaseListeners[i].key){
-				databaseListeners[i].callback(message.dataValue);
+
+		function afterResizeCoreWidget(widgetName,event){
+			for(var i = 0;i < coreWidgets.length;i++){
+				if(coreWidgets[i].name == widgetName){
+					coreWidgets[i].widgetClass.getWidgetCode().afterResize(event);
+					return;
+				}
 			}
 		}
-	});
-}
+
+		var zIndexCounter = 100;
+		this.setCoreWidgetMovement = function(state){
+			$(".coreWidgetMoveContainer").off();
+			$(".coreWidget-topResize").off();
+			$(".coreWidget-bottomResize").off();
+			$(".coreWidget-leftResize").off();
+			$(".coreWidget-topRightCornerResize").off();
+			$(".coreWidget-bottomRightCornerResize").off();
+			$(".coreWidget-bottomLeftCornerResize").off();
+			$(".coreWidget-topLeftCornerResize").off();
+			if(state){
+				$(".coreWidgetMoveContainer").css("display","block");
+				$(".coreWidget-topResize").css("display","block");
+				$(".coreWidget-bottomResize").css("display","block");
+				$(".coreWidget-leftResize").css("display","block");
+				$(".coreWidget-topRightCornerResize").css("display","block");
+				$(".coreWidget-bottomRightCornerResize").css("display","block");
+				$(".coreWidget-bottomLeftCornerResize").css("display","block");
+				$(".coreWidget-topLeftCornerResize").css("display","block");
+				$(".coreWidgetMoveContainer").mousedown(function(event){
+					zIndexCounter++;
+					var offsetX = event.offsetX;
+					var offsetY = event.offsetY;
+					var element = $(event.target).parent();
+					element.css("z-index",zIndexCounter);
+					$(document.body).append("<div class='coreLayoutManagerMouseCatcher'></div>")
+					$(".coreLayoutManagerMouseCatcher").mousemove(function(event){
+						element.css("top",(event.clientY - offsetY) + "px");
+						element.css("left",(event.clientX - offsetX) + "px");
+					});
+					$(".coreLayoutManagerMouseCatcher").mouseup(function(event){
+						$(".coreLayoutManagerMouseCatcher").off();
+						$(".coreLayoutManagerMouseCatcher").remove();
+					});
+				});
+				$(".coreWidget-topResize").mousedown(function(event){
+					zIndexCounter++;
+					var element = $(event.target).parent();
+					var initalY = element.position().top;
+					var initalHeight = element.height();
+					var widgetName = element.attr("widgetName");
+					element.css("z-index",zIndexCounter);
+					$(document.body).append("<div class='coreLayoutManagerMouseCatcher'></div>")
+					$(".coreLayoutManagerMouseCatcher").mousemove(function(event){
+						if(initalY + initalHeight < (event.clientY - 3)){
+							return;
+						}
+						element.css("top",event.clientY + "px");
+						var heightDifference = initalHeight + (initalY - event.clientY);
+						element.css("height",heightDifference + "px");
+						resizeCoreWidget(widgetName);
+					});
+					$(".coreLayoutManagerMouseCatcher").mouseup(function(event){
+						$(".coreLayoutManagerMouseCatcher").off();
+						$(".coreLayoutManagerMouseCatcher").remove();
+						afterResizeCoreWidget(widgetName);
+					});
+				});
+				$(".coreWidget-leftResize").mousedown(function(event){
+					zIndexCounter++;
+					var element = $(event.target).parent();
+					var initalX = element.position().left;
+					var initalWidth = element.width();
+					var widgetName = element.attr("widgetName");
+					element.css("z-index",zIndexCounter);
+					$(document.body).append("<div class='coreLayoutManagerMouseCatcher'></div>")
+					$(".coreLayoutManagerMouseCatcher").mousemove(function(event){
+						if(initalX + initalWidth < (event.clientX - 3)){
+							return;
+						}
+						element.css("left",event.clientX + "px");
+						var widthDifference = initalWidth + (initalX - event.clientX);
+						element.css("width",widthDifference + "px");
+						resizeCoreWidget(widgetName);
+					});
+					$(".coreLayoutManagerMouseCatcher").mouseup(function(event){
+						$(".coreLayoutManagerMouseCatcher").off();
+						$(".coreLayoutManagerMouseCatcher").remove();
+						afterResizeCoreWidget(widgetName);
+					});
+				});
+				$(".coreWidget-rightResize").mousedown(function(event){
+					zIndexCounter++;
+					var element = $(event.target).parent();
+					var widgetName = element.attr("widgetName");
+					element.css("z-index",zIndexCounter);
+					var xPos = element.position().left;
+					$(document.body).append("<div class='coreLayoutManagerMouseCatcher'></div>")
+					$(".coreLayoutManagerMouseCatcher").mousemove(function(event){
+						if(xPos > (event.clientX - 3)){
+							return;
+						}
+						element.css("width",(event.clientX - xPos)+ "px");
+						resizeCoreWidget(widgetName);
+					});
+					$(".coreLayoutManagerMouseCatcher").mouseup(function(event){
+						$(".coreLayoutManagerMouseCatcher").off();
+						$(".coreLayoutManagerMouseCatcher").remove();
+						afterResizeCoreWidget(widgetName);
+					});
+				});
+				$(".coreWidget-bottomResize").mousedown(function(event){
+					zIndexCounter++;
+					var element = $(event.target).parent();
+					var widgetName = element.attr("widgetName");
+					element.css("z-index",zIndexCounter);
+					var yPos = element.position().top;
+					$(document.body).append("<div class='coreLayoutManagerMouseCatcher'></div>")
+					$(".coreLayoutManagerMouseCatcher").mousemove(function(event){
+						if(yPos > (event.clientY - 3)){
+							return;
+						}
+						element.css("height",(event.clientY - yPos)+ "px");
+						resizeCoreWidget(widgetName);
+					});
+					$(".coreLayoutManagerMouseCatcher").mouseup(function(event){
+						$(".coreLayoutManagerMouseCatcher").off();
+						$(".coreLayoutManagerMouseCatcher").remove();
+						afterResizeCoreWidget(widgetName);
+					});
+				});
+				$(".coreWidget-topRightCornerResize").mousedown(function(event){
+					zIndexCounter++;
+					var element = $(event.target).parent();
+					var widgetName = element.attr("widgetName");
+					element.css("z-index",zIndexCounter);
+					var xPos = element.position().left;
+					var initalY = element.position().top;
+					var initalHeight = element.height();
+					$(document.body).append("<div class='coreLayoutManagerMouseCatcher'></div>")
+					$(".coreLayoutManagerMouseCatcher").mousemove(function(event){
+						if(xPos > (event.clientX - 3)){
+							return;
+						}
+						element.css("width",(event.clientX - xPos) + "px");
+						resizeCoreWidget(widgetName);
+						if(initalY + initalHeight < (event.clientY - 3)){
+							return;
+						}
+						element.css("top",event.clientY + "px");
+						var heightDifference = initalHeight + (initalY - event.clientY);
+						element.css("height",heightDifference + "px");
+						
+					});
+					$(".coreLayoutManagerMouseCatcher").mouseup(function(event){
+						$(".coreLayoutManagerMouseCatcher").off();
+						$(".coreLayoutManagerMouseCatcher").remove();
+						afterResizeCoreWidget(widgetName);
+					});
+				});
+				$(".coreWidget-bottomLeftCornerResize").mousedown(function(event){
+					zIndexCounter++;
+					var element = $(event.target).parent();
+					var widgetName = element.attr("widgetName");
+					element.css("z-index",zIndexCounter);
+					var yPos = element.position().top;
+					var initialX = element.position().left;
+					var initalWidth = element.width();
+					$(document.body).append("<div class='coreLayoutManagerMouseCatcher'></div>")
+					$(".coreLayoutManagerMouseCatcher").mousemove(function(event){
+						if(initialX + initalWidth < (event.clientX - 3)){
+							return;
+						}
+						element.css("left",event.clientX + "px");
+						var widthDifference = initalWidth + (initialX - event.clientX);
+						element.css("width",widthDifference + "px");
+
+						if(yPos > (event.clientY - 3)){
+							resizeCoreWidget(widgetName);
+							return;
+						}
+						element.css("height",(event.clientY - yPos)+ "px");
+						resizeCoreWidget(widgetName);
+					});
+
+
+					$(".coreLayoutManagerMouseCatcher").mouseup(function(event){
+						$(".coreLayoutManagerMouseCatcher").off();
+						$(".coreLayoutManagerMouseCatcher").remove();
+						afterResizeCoreWidget(widgetName);
+					});
+				});
+				$(".coreWidget-bottomRightCornerResize").mousedown(function(event){
+					zIndexCounter++;
+					var element = $(event.target).parent();
+					var widgetName = element.attr("widgetName");
+					element.css("z-index",zIndexCounter);
+					var yPos = element.position().top;
+					var xPos = element.position().left;
+					$(document.body).append("<div class='coreLayoutManagerMouseCatcher'></div>")
+					$(".coreLayoutManagerMouseCatcher").mousemove(function(event){
+						if(xPos > (event.clientX - 3)){
+							return;
+						}						
+						element.css("width",(event.clientX - xPos) + "px");
+						if(yPos > (event.clientY - 3)){
+							resizeCoreWidget(widgetName);
+							return;
+						}
+						element.css("height",(event.clientY - yPos)+ "px");
+						resizeCoreWidget(widgetName);
+					});
+					$(".coreLayoutManagerMouseCatcher").mouseup(function(event){
+						$(".coreLayoutManagerMouseCatcher").off();
+						$(".coreLayoutManagerMouseCatcher").remove();
+						afterResizeCoreWidget(widgetName);
+					});
+				});
+				$(".coreWidget-topLeftCornerResize").mousedown(function(event){
+					var element = $(event.target).parent();
+					zIndexCounter++;
+					element.css("z-index",zIndexCounter);
+					var widgetName = element.attr("widgetName");
+					var xPos = element.position().left;
+					var initialY = element.position().top;
+					var initialHeight = element.height();
+					var initialWidth = element.width();
+					$(document.body).append("<div class='coreLayoutManagerMouseCatcher'></div>")
+					$(".coreLayoutManagerMouseCatcher").mousemove(function(event){
+						if(xPos + initialWidth < (event.clientX - 3)){
+							return;
+						}
+						element.css("left",event.clientX + "px");
+						element.css("width",((xPos - event.clientX) + initialWidth) + "px");
+						if(initialY + initialHeight < (event.clientY - 3)){
+							resizeCoreWidget(widgetName);
+							return;
+						}
+						element.css("top",event.clientY + "px");
+						var heightDifference = initialHeight + (initialY - event.clientY);
+						element.css("height",heightDifference + "px");
+						resizeCoreWidget(widgetName);
+					});
+					$(".coreLayoutManagerMouseCatcher").mouseup(function(event){
+						$(".coreLayoutManagerMouseCatcher").off();
+						$(".coreLayoutManagerMouseCatcher").remove();
+						afterResizeCoreWidget(widgetName);
+					});
+				});
+			}else{
+				$(".coreWidgetMoveContainer").css("display","none");
+				$(".coreWidget-topResize").css("display","none");
+				$(".coreWidget-bottomResize").css("display","none");
+				$(".coreWidget-leftResize").css("display","none");
+				$(".coreWidget-topRightCornerResize").css("display","none");
+				$(".coreWidget-bottomRightCornerResize").css("display","none");
+				$(".coreWidget-bottomLeftCornerResize").css("display","none");
+				$(".coreWidget-topLeftCornerResize").css("display","none");
+			}
+		}
+
+		require('electron').ipcRenderer.on('presetsFileDidChange', (event, message) => {
+			for(var i = 0; i < presetListeners.length;i++){
+				if(message.key == presetListeners[i].key){
+					presetListeners[i].callback(message.value);
+				}
+			}
+		});
+		require('electron').ipcRenderer.on('databaseValueDidChange', (event, message) => {
+			for(var i = 0; i < databaseListeners.length;i++){
+				if(message.key == databaseListeners[i].key){
+					databaseListeners[i].callback(message.dataValue);
+				}
+			}
+		});
+	}
 
 /*
 	The core widget class
@@ -288,39 +579,43 @@ var InterstellarFramework = function(){
 			Purpose: returns the unique widget GUID
 			Takes: nothing,
 			Returns: String - The unique GUID for this widget
-*/
+			*/
 
-var CoreWidget = function(widgetName,WidgetCode){
-	var widgetName = widgetName;
-	var instantiatedCode = new WidgetCode();
-	var widgetID = ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g, c =>
-    	(c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
-  	);
+			var CoreWidget = function(widgetName,WidgetCode){
+				var widgetName = widgetName;
+				var instantiatedCode = new WidgetCode();
+				var widgetID = ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g, c =>
+					(c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
+					);
 
-	this.setWidgetName = function(newName){
-		widgetName = newName;
-	}
+				this.setWidgetName = function(newName){
+					widgetName = newName;
+				}
 
-	this.getWidgetName = function(){
-		return widgetName;
-	}
+				this.getWidgetName = function(){
+					return widgetName;
+				}
 
-	this.setWidgetCode = function(WidgetCode){
-		console.warn("Warning!  'setWidgetCode' may leak database, preset, and event listeners!");
-		instantiatedCode = new WidgetCode();
-	}
+				this.setWidgetCode = function(WidgetCode){
+					console.warn("Warning!  'setWidgetCode' may leak database, preset, and event listeners!");
+					instantiatedCode = new WidgetCode();
+				}
 
-	this.getWidgetCode = function(){
-		return instantiatedCode;
-	}
+				this.getWidgetCode = function(){
+					return instantiatedCode;
+				}
 
-	this.getWidgetID = function(){
-		return widgetID;
-	}
-}
+				this.getWidgetID = function(){
+					return widgetID;
+				}
+			}
 
-var Interstellar = new InterstellarFramework();
+			var Interstellar = new InterstellarFramework();
 
+			function playRandomBeep(){
+				var audio = new Audio('/randomBeep?id=' + Math.random());
+				audio.play();
+			}	
 //for support back when Interstellar Libraries used
 //globally defined functions.  These practices were
 //depreciated in Alpha 1.2.0, and will be removed in

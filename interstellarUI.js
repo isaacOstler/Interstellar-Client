@@ -10,7 +10,15 @@ function playRandomBeep(){
 var INTERSTELLAR_UI_CURRENTLY_SELECTED_CORE_WINDOW_DRAGING_TARGET = undefined;
 var INTERSTELLAR_UI_CURRENTLY_SELECTED_CORE_WINDOW_DRAGING_TOP_Z_INDEX = 25555;
 //long crazy name in hopes it will never be seen by anybody else's code
-
+$(".Core_Theme-CoreWidget").append("<div class='coreWidgetMoveContainer'></div>");
+$(".Core_Theme-CoreWidget").append("<div class='coreWidget-topResize'></div>");
+$(".Core_Theme-CoreWidget").append("<div class='coreWidget-bottomResize'></div>");
+$(".Core_Theme-CoreWidget").append("<div class='coreWidget-leftResize'></div>");
+$(".Core_Theme-CoreWidget").append("<div class='coreWidget-rightResize'></div>");
+$(".Core_Theme-CoreWidget").append("<div class='coreWidget-topRightCornerResize'></div>");
+$(".Core_Theme-CoreWidget").append("<div class='coreWidget-bottomRightCornerResize'></div>");
+$(".Core_Theme-CoreWidget").append("<div class='coreWidget-bottomLeftCornerResize'></div>");
+$(".Core_Theme-CoreWidget").append("<div class='coreWidget-topLeftCornerResize'></div>");
 
 $( ".coreWindow" ).each(function() {
 	var windowName = $(this).attr("windowName");
