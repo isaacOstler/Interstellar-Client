@@ -244,6 +244,81 @@ var InterstellarFramework = function(){
 	});
 }
 
+/*
+	The core widget class
+
+	Name: CoreWidget,
+	Purpose: To control the code of a core widget,
+	Takes: String - Name of class
+		   Custom Class - The code for the widget
+	
+	Public Methods:
+	
+		Setter - WidgetName
+
+			Name: setWidgetName(),
+			Purpose: Set the value of WidgetName,
+			Takes: String - Name of the widget,
+			Returns: void
+
+		Getter - WidgetName
+
+			Name: getWidgetName(),
+			Purpose: Get the value of WidgetName,
+			Takes: nothing,
+			Returns: void
+
+		Setter - WidgetCode
+
+			Name: setWidgetCode(),
+			Purpose: Set the code of the widget
+			Takes: Custom Class - The actual code for the widget, defined as a class (not yet instantiated)
+			Returns: void
+
+		Getter - WidgetCode
+
+			Name: getWidgetCode(),
+			Purpose: Get the code of the widget
+			Takes: nothing
+			Returns: Custom Class - The actual !!instantiated!! class for the widget
+
+		Getter - WidgetID
+
+			Name: getWidgetID(),
+			Purpose: returns the unique widget GUID
+			Takes: nothing,
+			Returns: String - The unique GUID for this widget
+*/
+
+var CoreWidget = function(widgetName,WidgetCode){
+	var widgetName = widgetName;
+	var instantiatedCode = new WidgetCode();
+	var widgetID = ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g, c =>
+    	(c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
+  	);
+
+	this.setWidgetName = function(newName){
+		widgetName = newName;
+	}
+
+	this.getWidgetName = function(){
+		return widgetName;
+	}
+
+	this.setWidgetCode = function(WidgetCode){
+		console.warn("Warning!  'setWidgetCode' may leak database, preset, and event listeners!");
+		instantiatedCode = new WidgetCode();
+	}
+
+	this.getWidgetCode = function(){
+		return instantiatedCode;
+	}
+
+	this.getWidgetID = function(){
+		return widgetID;
+	}
+}
+
 var Interstellar = new InterstellarFramework();
 
 //for support back when Interstellar Libraries used
