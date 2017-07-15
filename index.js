@@ -436,7 +436,10 @@ app.on('ready',function(){
 						}
 					}
 				});
-
+				interstellarApp.get("/soundEffects",function(req,res){
+					console.log(mainProcessMessage + "Playing sound effect '" + req.query.soundEffect + "'");
+					res.sendFile(__dirname + "/public/soundEffects/" + req.query.soundEffect);
+				});
 				interstellarApp.get("/InterstellarLibraries",function(req,res){
 					res.sendFile(__dirname + "/interstellarLibraries.js");
 				})
@@ -624,7 +627,7 @@ app.on('ready',function(){
 
 				}
 				function changeStationScreen(screenName){
-					alert(screenName);
+					
 				}
 
 

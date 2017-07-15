@@ -193,13 +193,29 @@
 	/*
 	Function Name : setCurrentScreen()
 	Parameters : screenName
-	Returns : none
+	Returns : void
 	Purpose : FOR BRIDGE STATION USE ONLY!  Sets the current screen to the screen specified
 	*/
 
 	this.setCurrentScreen = function(screenName){
-		var ipcRenderer = require('electron').ipcRenderer;
-		ipcRenderer.send("setCurrentScreen",screenName);
+		location.href = "/card?card=" + screenName;
+		/*
+			var ipcRenderer = require('electron').ipcRenderer;
+			ipcRenderer.send("setCurrentScreen",screenName);
+		*/
+	}
+
+	/*
+	Function Name : setCurrentScreen()
+	Parameters : nothing
+	Returns : string
+	Purpose : FOR BRIDGE STATION USE ONLY!  Gets the current screen to the screen the user is on
+	*/
+
+	this.getCurrentScreen = function(screenName){
+		var windowSrc = window.location.href;
+		var currentScreen = windowSrc.split("card=");
+		return currentScreen[1];
 	}
 
 	/*
@@ -228,6 +244,11 @@
 	this.getPresetValue = function(key){
 		var ipcRenderer = require('electron').ipcRenderer;
 		return ipcRenderer.sendSync("getPresetWithKey",key);
+	}
+
+	this.playSoundEffect = function(soundEffect){
+		var audio = new Audio('/soundEffects?soundEffect=' + soundEffect);
+		audio.play();
 	}
 
 	/*
@@ -615,7 +636,7 @@
 			function playRandomBeep(){
 				var audio = new Audio('/randomBeep?id=' + Math.random());
 				audio.play();
-			}	
+			}
 //for support back when Interstellar Libraries used
 //globally defined functions.  These practices were
 //depreciated in Alpha 1.2.0, and will be removed in

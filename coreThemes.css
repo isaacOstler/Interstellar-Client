@@ -276,6 +276,7 @@ body{
 	z-index: 10000;
 }
 .coreWidgetMoveContainer{
+	display: none;
 	position: absolute;
 	top:0px;
 	left: 0px;
@@ -285,6 +286,7 @@ body{
 	cursor: move;
 }
 .coreWidget-topResize{
+	display: none;
 	position: absolute;
 	top:-2px;
 	left: 4px;
@@ -294,6 +296,7 @@ body{
 	cursor: ns-resize;
 }
 .coreWidget-bottomResize{
+	display: none;
 	position: absolute;
 	bottom:-2px;
 	left: 4px;
@@ -303,6 +306,7 @@ body{
 	cursor: ns-resize;
 }
 .coreWidget-leftResize{
+	display: none;
 	position: absolute;
 	top:4px;
 	left: -2px;
@@ -312,6 +316,7 @@ body{
 	cursor: ew-resize;
 }
 .coreWidget-rightResize{
+	display: none;
 	position: absolute;
 	top:4px;
 	right: -2px;
@@ -321,6 +326,7 @@ body{
 	cursor: ew-resize;
 }
 .coreWidget-topRightCornerResize{
+	display: none;
 	position: absolute;
 	top:-2px;
 	right: -2px;
@@ -330,6 +336,7 @@ body{
 	cursor: nesw-resize;
 }
 .coreWidget-bottomLeftCornerResize{
+	display: none;
 	position: absolute;
 	bottom: -2px;
 	left: -2px;
@@ -339,6 +346,7 @@ body{
 	cursor: nesw-resize;
 }
 .coreWidget-topLeftCornerResize{
+	display: none;
 	position: absolute;
 	top: -2px;
 	left: -2px;
@@ -348,6 +356,7 @@ body{
 	cursor: nwse-resize;
 }
 .coreWidget-bottomRightCornerResize{
+	display: none;
 	position: absolute;
 	bottom: -2px;
 	right: -2px;
