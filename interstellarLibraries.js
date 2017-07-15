@@ -52,7 +52,12 @@
 	  		"key" : valueName,
 	  		"callback" : callback
 	  	});
-	  	callback(this.getPresetValue(valueName).value);
+	  	var presetValue = this.getPresetValue(valueName);
+	  	if(presetValue == null){
+	  		callback(null);
+	  	}else{
+	  		callback(presetValue.value);
+	  	}
 	  }
 	/*
 	Function Name : onDatabaseValueChange(valueName,callback(newData){})
