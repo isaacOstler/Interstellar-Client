@@ -673,7 +673,7 @@ function getAdminPassword(callback){
 }
 function getFileNamesInFolder(folder,screen,callback){
 	console.warn("WARNING: 'getFileNamesInFolder' has been depreciated in Interstellar Alpha 1.2.0!  Use 'Interstellar.getFileNamesInFolder' to access the globablly defined instance, or define your own with 'new InterstellarFramework()'");
-	Interstellar.getAdminPassword(folder,screen,callback);	
+	Interstellar.getFileNamesInFolder(folder,screen,callback);	
 }
 function interstellarSay(string){
 	console.warn("WARNING: 'interstellarSay' has been depreciated in Interstellar Alpha 1.2.0!  Use 'Interstellar.say' to access the globablly defined instance, or define your own with 'new InterstellarFramework()'");
