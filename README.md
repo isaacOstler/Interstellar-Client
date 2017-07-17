@@ -13,7 +13,7 @@ Building the client can be very frustrating.  Electron and native node packages 
 5) npm install node-gyp -g
 6) ensure you have python 2.x installed
 7) ensure you have the .NET framework installed
-8) electron-rebuild --version=1.4.13
+8) electron-rebuild --version=1.6.11 (version is the version of your globally installed electron)
 
 <b>Launching</b>
 
