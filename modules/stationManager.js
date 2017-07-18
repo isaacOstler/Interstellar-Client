@@ -30,12 +30,17 @@ module.exports.init = function(clientIPC,createdWindow, webSocket,changeStationS
 	changeStationScreen = changeStationScreenFunction;
 
 	socket.on('databaseValueDidChange',function(data){
-		console.log(stationManagerConsolePrefix + "New data! " + JSON.stringify(data));
-		browserWindow.webContents.send('databaseValueDidChange',
-		{
-			"key" : data.key,
-			"dataValue" : data.dataValue
-		});
+		if(data == "all"){
+			console.log(stationManagerConsolePrefix + "Database Reset!");
+			browserWindow.webContents.send('databaseValueDidReset');
+		}else{
+			console.log(stationManagerConsolePrefix + "New data! " + JSON.stringify(data));
+			browserWindow.webContents.send('databaseValueDidChange',
+			{
+				"key" : data.key,
+				"dataValue" : data.dataValue
+			});
+		}
 	});
 	console.log(stationManagerConsolePrefix + "did init");
 }
@@ -47,6 +52,11 @@ module.exports.setStation = function(stationName){
 ipc.on('createDatabaseListener',function(event, data){
 	console.log("database listener registered");
 });*/
+
+ipc.on('clearDatabase',function(){
+	console.log(stationManagerConsolePrefix + "[" + "CLEAR".error + "] " + "CLEARING DATABASE!".bold.error);
+	socket.emit("clearDatabase");
+});
 
 ipc.on('setDatabaseValue',function(event, data){
 	console.log(stationManagerConsolePrefix + "[" + "SET".warn + "] " + JSON.stringify(data));

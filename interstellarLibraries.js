@@ -14,6 +14,7 @@
  var InterstellarFramework = function(){
 
  	var coreWidgets = [];
+ 	var isClearingDatabase = false;
 
 	var databaseListeners = []; //full description of this variable and how it works below
 	/*
@@ -87,12 +88,29 @@
 	Purpose : Update value on the database, and if no value exists, create a new document
 	*/
 	this.setDatabaseValue = function(valueKey,newData){
+		if(isClearingDatabase){
+			//do NOT allow the client to set database values
+			//during a reset
+			return;
+		}
 		var databaseValue = {
 			"key" : valueKey,
 			"dataValue" : newData
 		};
 		var ipcRenderer = require('electron').ipcRenderer;
 		ipcRenderer.send("setDatabaseValue",databaseValue);
+	}
+
+	/*
+	Function Name : clearDatabase()
+	Parameters : none
+	Returns : void
+	Purpose : Sets all database values to null, orders reload of the page as well
+	*/
+	this.clearDatabase = function(){
+		isClearingDatabase = true;
+		var ipcRenderer = require('electron').ipcRenderer;
+		ipcRenderer.send("clearDatabase");
 	}
 
 	this.getAdminPassword = function(callbackPassed){
@@ -558,6 +576,9 @@
 					databaseListeners[i].callback(message.dataValue);
 				}
 			}
+		});
+		require('electron').ipcRenderer.on('databaseValueDidReset', (event, message) => {
+			location.reload();
 		});
 	}
 
