@@ -533,7 +533,13 @@ app.on('ready',function(){
 					res.sendFile(__dirname + "/coreThemes.css");
 				});
 				interstellarApp.get("/threeJS", function(req, res){
-					res.sendFile(__dirname + "/modules/three.min.js");
+					if(req.query.file == undefined){
+						console.log(mainProcessMessage + "Loading three.min.js");
+						res.sendFile(__dirname + "/modules/three.min.js");
+					}else{
+						console.log(mainProcessMessage + "Loading three.js asset '" + req.query.file + "'");
+						res.sendFile(__dirname + "/modules/threeJSLibraries/" + req.query.file);
+					}
 				});
 
 				interstellarApp.get("/card", function(req, res){
