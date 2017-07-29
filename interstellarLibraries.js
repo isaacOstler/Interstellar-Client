@@ -273,6 +273,10 @@
 		var audio = new Audio('/soundEffects?soundEffect=' + soundEffect);
 		audio.play();
 	}
+	this.playErrorNoise = function(){
+		var audio = new Audio('/randomError?variance=' + Math.random());
+		audio.play();
+	}
 
 	/*
 
@@ -313,6 +317,7 @@
 		}
 
 		var zIndexCounter = 100;
+
 		this.setCoreWidgetMovement = function(state){
 			$(".coreWidgetMoveContainer").off();
 			$(".coreWidget-topResize").off();

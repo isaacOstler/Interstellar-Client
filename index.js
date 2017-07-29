@@ -141,6 +141,7 @@ var allStations;
 var dateInstalledByLog;
 
 const computerBeepFolder = __dirname + '/public/computerBeeps';
+const errorSFXFolder = __dirname + '/public/errors';
 
 //const container1GUILocation = '/public/LCARS-background-3.png';
 const container1GUILocation = '/public/box1.png';
@@ -153,6 +154,7 @@ const background1Location = "/public/background1.png";
 const background2Location = "/public/background2.png";
 
 var computerBeeps = [];
+var errorSFX = [];
 
 var ipc = require('electron').ipcMain;
 var io = require('socket.io-client')
@@ -239,7 +241,25 @@ app.on('ready',function(){
 					console.log(mainProcessMessage + "NO COMPUTER BEEPS WERE FOUND IN '".error + computerBeepFolder.input + "'".error);
 				}
 			}
-		})
+		});
+		fs.readdir(errorSFXFolder, (err, files) => {
+
+			if(err){
+				console.log(mainProcessMessage + "ERROR FINDING COMPUTER ERRROR_SFX NOISES: ".error + err.toString().error)
+			}else{
+				if(files.length > 0){
+					files.forEach(file => {
+						if(file == ".DS_Store"){
+							return;
+						}
+						console.log(mainProcessMessage + "[" + "INDEXED".info + "] " + file + " found in '" + errorSFXFolder + "'");
+						errorSFX.splice(computerBeeps.length, 0, file);
+					});
+				}else{
+					console.log(mainProcessMessage + "NO ERRORS_SFX WERE FOUND IN '".error + errorSFXFolder.input + "'".error);
+				}
+			}
+		});
 		console.log(mainProcessMessage + "Connecting to server at address '" + serverAddress + ":" + serverPort + "'");
 		var socketConnectionAddress = "http://" + serverAddress + ":" + serverPort;
 		var socket = io.connect(socketConnectionAddress,{
@@ -489,6 +509,12 @@ app.on('ready',function(){
 					randomNumber = Math.round(randomNumber);
 					console.log(mainProcessMessage + "Playing beep '" + computerBeeps[randomNumber] + "' (index " + randomNumber + ")")
 					res.sendFile(computerBeepFolder + "/" + computerBeeps[randomNumber]);
+				});
+				interstellarApp.get("/randomError", function(req, res){
+					var randomNumber = Math.random() * (errorSFX.length - 1);
+					randomNumber = Math.round(randomNumber);
+					console.log(mainProcessMessage + "Playing error '" + errorSFX[randomNumber] + "' (index " + randomNumber + ")")
+					res.sendFile(errorSFXFolder + "/" + errorSFX[randomNumber]);
 				});
 				interstellarApp.get("/core", function(req, res){
 					var path = screenFolderLocation + "/coreView.ejs";
