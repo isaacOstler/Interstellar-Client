@@ -61,6 +61,13 @@ body{
   padding: 10px;
 }
 
+.container5{
+  border-image-source: url('/container4');
+  border-image-slice: fill 49 49 49 49;
+  border-image-width: 2em;
+  padding: 10px;
+}
+
 .buttonEffect:hover{
   cursor: pointer;
   filter:brightness(1.3);
@@ -182,6 +189,11 @@ input[type=text] {
       border-image-slice: fill 49 49 49 49;
       border-image-width: 2em;
       cursor: pointer;
+      padding-top:0px;
+      padding-bottom: 0px;
+      display:-webkit-box;
+      -webkit-box-pack:center;
+      -webkit-box-align:center;
 }
 .Button2Disabled{
       width: 80%;
@@ -194,6 +206,11 @@ input[type=text] {
       cursor: default;
       filter:grayscale(1) brightness(.75);
       color:#707070;
+      padding-top:0px;
+      padding-bottom: 0px;
+      display:-webkit-box;
+      -webkit-box-pack:center;
+      -webkit-box-align:center;
 }
 
 .disabledButton{

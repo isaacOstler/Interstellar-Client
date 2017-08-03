@@ -60,7 +60,7 @@ body{
 	background-color: rgba(50,50,50,.6);
 	border: 1px solid white;
 	height: 20px;
-	overflow: none;
+	overflow: hidden;
 	cursor: ew-resize;
 }
 .customButton{

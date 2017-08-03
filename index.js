@@ -423,7 +423,7 @@ app.on('ready',function(){
 											openBrowsers.push(stationBrowser);
 											stationBrowser.setFullScreen(true);
 											presetManager.init(ipc,presetsFileLocation,stationBrowser);
-											stationManager.init(ipc,stationBrowser, socket,changeStationScreen,getAdminPassword);
+											stationManager.init(ipc,stationBrowser, socket,changeStationScreen,getAdminPassword,serverFunctionManager);
 											stationBrowser.loadURL("http://localhost:" + portNumber + "/core");
 										}); 
 									}else{
@@ -704,8 +704,9 @@ app.on('ready',function(){
 										backgroundColor: '#2e2c29'
 									});
 									isCoreStation = false;
-									stationManager.init(ipc,stationBrowser, socket,changeStationScreen);
 									serverFunctionManager.init(ipc,stationBrowser,socket,io,colors,changeStationScreen,station);
+									stationManager.init(ipc,stationBrowser, socket,changeStationScreen,getAdminPassword,serverFunctionManager);
+									
 									var cardPaths = cardManager.getCardPaths();
 									console.log(mainProcessMessage + "loading server scripts...");
 									for(var i = 0; i < cardPaths.length;i++){

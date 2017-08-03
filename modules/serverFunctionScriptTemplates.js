@@ -9,7 +9,14 @@ var IF_SERVER_FUNCTION_MANAGER_socket;
 var IF_SERVER_FUNCTION_MANAGER_databaseValueDidChangeCallbacks = [];
 var SerialPort;
 
+module.exports.resetScript = function(){
+	console.log("Please set a reset function for your server script!".error.bold)
+}
+
 var InterstellarFramework = function(){
+	this.onDatabaseClear = function(callback){
+		module.exports.resetScript = callback;
+	}
 	this.onDatabaseValueChange = function(valueName,callback){
 		console.log("[INTERSTELLAR] databaseListener created, watching value " + valueName + " (run callback upon change)");
 		IF_SERVER_FUNCTION_MANAGER_databaseValueDidChangeCallbacks.push({

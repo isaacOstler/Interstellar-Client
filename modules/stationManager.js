@@ -7,6 +7,7 @@ var browserWindow;
 var changeStationScreen;
 var socket;
 var getAdminFunction;
+var serverFunctionManager;
 
 colors.setTheme({
 	silly: 'rainbow',
@@ -22,12 +23,13 @@ colors.setTheme({
 });
 var stationManagerConsolePrefix = "[" + "STATION MANAGER".verbose + "] ";
 
-module.exports.init = function(clientIPC,createdWindow, webSocket,changeStationScreenFunction,getAdminFunctionPassed){
+module.exports.init = function(clientIPC,createdWindow, webSocket,changeStationScreenFunction,getAdminFunctionPassed,serverFunctionManagerPassed){
 	getAdminFunction = getAdminFunctionPassed;
 	ipc = clientIPC;
 	browserWindow = createdWindow;
 	socket = webSocket;
 	changeStationScreen = changeStationScreenFunction;
+	serverFunctionManager = serverFunctionManagerPassed;
 
 	socket.on('databaseValueDidChange',function(data){
 		if(data == "all"){
@@ -55,6 +57,7 @@ ipc.on('createDatabaseListener',function(event, data){
 
 ipc.on('clearDatabase',function(){
 	console.log(stationManagerConsolePrefix + "[" + "CLEAR".error + "] " + "CLEARING DATABASE!".bold.error);
+	serverFunctionManager.resetScripts();
 	socket.emit("clearDatabase");
 });
 
