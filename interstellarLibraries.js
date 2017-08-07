@@ -208,7 +208,7 @@
 		output = Array.isArray(o) ? [] : {};
 		for (key in o) {
 			v = o[key];
-			output[key] = (typeof v === "object") ? IFDeepCopyArray(v) : v;
+			output[key] = (typeof v === "object") ? this.deepCopyArray(v) : v;
 		}
 		return output;
 	}
@@ -275,6 +275,10 @@
 	}
 	this.playErrorNoise = function(){
 		var audio = new Audio('/randomError?variance=' + Math.random());
+		audio.play();
+	}
+	this.playRandomBeep = function(){
+		var audio = new Audio('/randomBeep?id=' + Math.random());
 		audio.play();
 	}
 
@@ -664,10 +668,11 @@
 
 			var Interstellar = new InterstellarFramework();
 
-			function playRandomBeep(){
-				var audio = new Audio('/randomBeep?id=' + Math.random());
-				audio.play();
-			}
+function playRandomBeep(){
+	console.warn("WARNING: 'playRandomBeep' has been depreciated in Interstellar Alpha 1.2.0!  Use 'Interstellar.playRandomBeep' to access the globablly defined instance, or define your own with 'new InterstellarFramework()'");
+	var audio = new Audio('/randomBeep?id=' + Math.random());
+	audio.play();
+}
 //for support back when Interstellar Libraries used
 //globally defined functions.  These practices were
 //depreciated in Alpha 1.2.0, and will be removed in
