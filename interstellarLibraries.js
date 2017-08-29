@@ -72,14 +72,14 @@
 			  be passed
 			  */
 
-			  this.onDatabaseValueChange = function(valueName,callback){
+	this.onDatabaseValueChange = function(valueName,callback){
 	  	//console.log("[INTERSTELLAR] databaseListener created, watching value " + valueName + " (run callback upon change)");
 	  	databaseListeners.push({
 	  		"key" : valueName,
 	  		"callback" : callback
 	  	});
 	  	callback(this.getDatabaseValue(valueName));
-	  }
+	}
 	/*
 	Function Name : setDatabaseValue(valueKey,newData)
 	Parameters : (string) value key, this string will be used to identify the value on the database
@@ -702,6 +702,7 @@
 			}
 		});
 		require('electron').ipcRenderer.on('databaseValueDidChange', (event, message) => {
+			console.log(databaseListeners);
 			for(var i = 0; i < databaseListeners.length;i++){
 				if(message.key == databaseListeners[i].key){
 					databaseListeners[i].callback(message.dataValue);
@@ -796,6 +797,7 @@ function playRandomBeep(){
 	var audio = new Audio('/randomBeep?id=' + Math.random());
 	audio.play();
 }
+
 //for support back when Interstellar Libraries used
 //globally defined functions.  These practices were
 //depreciated in Alpha 1.2.0, and will be removed in

@@ -27,11 +27,11 @@ module.exports.init = function(cardLoc,screenLoc,downloadLoc){
 	console.log("[" + "CARD MANAGER".blue + "] " + "Deleting old downloads....".grey);
 	removeAllItemsAndDeleteFolder(downloadLoc);
 	//mkdirp.sync(downloadLoc);
-	console.log("[" + "CARD MANAGER".blue + "] " + "Complete".grey);
+	console.log("[" + "CARD MANAGER".blue + "] " + "Complete".info);
 	console.log("[" + "CARD MANAGER".blue + "] " + "Deleting old cards....".grey);
 	removeAllItemsAndDeleteFolder(cardFolderLocation);
 	//mkdirp.sync(cardFolderLocation);
-	console.log("[" + "CARD MANAGER".blue + "] " + "Complete".grey);
+	console.log("[" + "CARD MANAGER".blue + "] " + "Complete".info);
 }
 
 module.exports.initCard = function(cardPath,cardName,callback){
