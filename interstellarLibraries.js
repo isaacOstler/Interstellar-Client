@@ -702,7 +702,6 @@
 			}
 		});
 		require('electron').ipcRenderer.on('databaseValueDidChange', (event, message) => {
-			console.log(databaseListeners);
 			for(var i = 0; i < databaseListeners.length;i++){
 				if(message.key == databaseListeners[i].key){
 					databaseListeners[i].callback(message.dataValue);
