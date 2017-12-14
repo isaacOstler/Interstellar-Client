@@ -3,7 +3,7 @@
  * how you may/may not use, modify, and/or distribute this code.
  *
  * You should have received a copy of our license with
- * this file. If not, please email lavapig2020@gmail.com,
+ * this file. If not, please email isaac@spaceCampUtah.org,
  * or visit interstellar's website
  *
  * Created by Isaac Ostler, to be used
@@ -724,72 +724,72 @@
 	
 	Public Methods:
 	
-		Setter - WidgetName
+	Setter - WidgetName
 
-			Name: setWidgetName(),
-			Purpose: Set the value of WidgetName,
-			Takes: String - Name of the widget,
-			Returns: void
+		Name: setWidgetName(),
+		Purpose: Set the value of WidgetName,
+		Takes: String - Name of the widget,
+		Returns: void
 
-		Getter - WidgetName
+	Getter - WidgetName
 
-			Name: getWidgetName(),
-			Purpose: Get the value of WidgetName,
-			Takes: nothing,
-			Returns: void
+		Name: getWidgetName(),
+		Purpose: Get the value of WidgetName,
+		Takes: nothing,
+		Returns: void
 
-		Setter - WidgetCode
+	Setter - WidgetCode
 
-			Name: setWidgetCode(),
-			Purpose: Set the code of the widget
-			Takes: Custom Class - The actual code for the widget, defined as a class (not yet instantiated)
-			Returns: void
+		Name: setWidgetCode(),
+		Purpose: Set the code of the widget
+		Takes: Custom Class - The actual code for the widget, defined as a class (not yet instantiated)
+		Returns: void
 
-		Getter - WidgetCode
+	Getter - WidgetCode
 
-			Name: getWidgetCode(),
-			Purpose: Get the code of the widget
-			Takes: nothing
-			Returns: Custom Class - The actual !!instantiated!! class for the widget
+		Name: getWidgetCode(),
+		Purpose: Get the code of the widget
+		Takes: nothing
+		Returns: Custom Class - The actual !!instantiated!! class for the widget
 
-		Getter - WidgetID
+	Getter - WidgetID
 
-			Name: getWidgetID(),
-			Purpose: returns the unique widget GUID
-			Takes: nothing,
-			Returns: String - The unique GUID for this widget
-			*/
+		Name: getWidgetID(),
+		Purpose: returns the unique widget GUID
+		Takes: nothing,
+		Returns: String - The unique GUID for this widget
+*/
 
-			var CoreWidget = function(widgetName,WidgetCode){
-				var widgetName = widgetName;
-				var instantiatedCode = new WidgetCode();
-				var widgetID = ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g, c =>
-					(c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
-					);
+var CoreWidget = function(widgetName,WidgetCode){
+	var widgetName = widgetName;
+	var instantiatedCode = new WidgetCode();
+	var widgetID = ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g, c =>
+		(c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
+		);
 
-				this.setWidgetName = function(newName){
-					widgetName = newName;
-				}
+	this.setWidgetName = function(newName){
+		widgetName = newName;
+	}
 
-				this.getWidgetName = function(){
-					return widgetName;
-				}
+	this.getWidgetName = function(){
+		return widgetName;
+	}
 
-				this.setWidgetCode = function(WidgetCode){
-					console.warn("Warning!  'setWidgetCode' may leak database, preset, and event listeners!");
-					instantiatedCode = new WidgetCode();
-				}
+	this.setWidgetCode = function(WidgetCode){
+		console.warn("Warning!  'setWidgetCode' may leak database, preset, and event listeners!");
+		instantiatedCode = new WidgetCode();
+	}
 
-				this.getWidgetCode = function(){
-					return instantiatedCode;
-				}
+	this.getWidgetCode = function(){
+		return instantiatedCode;
+	}
 
-				this.getWidgetID = function(){
-					return widgetID;
-				}
-			}
+	this.getWidgetID = function(){
+		return widgetID;
+	}
+}
 
-			var Interstellar = new InterstellarFramework();
+var Interstellar = new InterstellarFramework();
 
 function playRandomBeep(){
 	console.warn("WARNING: 'playRandomBeep' has been depreciated in Interstellar Alpha 1.2.0!  Use 'Interstellar.playRandomBeep' to access the globablly defined instance, or define your own with 'new InterstellarFramework()'");
