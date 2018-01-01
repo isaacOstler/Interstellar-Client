@@ -254,7 +254,7 @@ function initApp() {
                 } else {
                     mainWindow = openBrowsers[0];
                 }
-                mainWindow.loadURL('file://' + publicPathLocation + "/grabStations.html");
+                mainWindow.loadURL('file://' + __dirname + "/localPublic/grabStations.html");
             });
 
             socket.on('disconnect', function(data) {
@@ -472,6 +472,12 @@ function initApp() {
                     }
                 }
             });
+            //if a card ever requests a local resource
+            interstellarApp.get("/localResource", function(req, res) {
+                console.log("\n\n\n\n\n\n");
+                console.log(mainProcessMessage + "LOADING LOCAL RESOURCE " + req.query.path.toString());
+                res.sendFile(__dirname  + "/localPublic/" + req.query.path);
+            });
             interstellarApp.get("/soundEffects", function(req, res) {
                 console.log(mainProcessMessage + "Playing sound effect '" + req.query.soundEffect + "'");
                 res.sendFile(publicPathLocation + "/public/soundEffects/" + req.query.soundEffect);
@@ -659,7 +665,7 @@ function initApp() {
                     transparent: true
                 });
                 //load the loading screen on the browser window
-                loadingScreen.loadURL('file://' + localPublicFolder + "/loadingStation.html");
+                loadingScreen.loadURL('file://' + __dirname + "/localPublic/loadingStation.html");
                 //close the stationServerSelectWindow, so the user doesn't try to load another station
                 closeAllWindows();
                 openBrowsers.push(loadingScreen);
@@ -810,7 +816,7 @@ function initApp() {
                 //don't allow the user to resize
                 mainWindow.setResizable(false);
                 //load the actual loading screen html
-                mainWindow.loadURL('file://' + publicPathLocation + "/findingServer.html");
+                mainWindow.loadURL('file://' + __dirname + "/localPublic/findingServer.html");
                 callback(mainWindow);
             }
 
@@ -819,7 +825,7 @@ function initApp() {
                 //load the screen that tells the user not to touch anything
                 mainWindow.setFullScreen(true);
 
-                mainWindow.loadURL('file://' + publicPathLocation + "/stationOfflineView.html");
+                mainWindow.loadURL('file://' + __dirname + "/localPublic/stationOfflineView.html");
                 callback(mainWindow);
             }
 
