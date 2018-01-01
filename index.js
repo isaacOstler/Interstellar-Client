@@ -22,10 +22,10 @@ colors.setTheme({
 });
 
 
-var loadingScreen;
-var portNumber = 3075;
-var serverAddress = "localhost";
-var serverPort = 3000;
+var loadingScreen,
+    portNumber = 3075,
+    serverAddress = "localhost",
+    serverPort = 3000;
 
 if (process.argv.length > 2) {
     portNumber = process.argv[2];
@@ -62,8 +62,13 @@ if (!fs.existsSync(interstellarFolder + "/userPrefs")) {
 
 
 var cardFolderLocation = path.normalize(interstellarFolder + "/port" + portNumber + "/cards"); //"Library/Application Support/interstellar/cards";
+var themeFolderLocation = path.normalize(interstellarFolder + "/port" + portNumber + "/theme"); //"Library/Application Support/interstellar/themes";
 var screenFolderLocation = path.normalize(interstellarFolder + "/port" + portNumber + "/screens"); //"Library/Application Support/interstellar/screens";
 var downloadFolderLocation = path.normalize(interstellarFolder + "/port" + portNumber + "/download"); //"Library/Application Support/interstellar/downloadFolderLocation";
+var publicPathLocation = "THEME_FILE_PATH",
+    coreThemesFileLocation = "coreThemesFileLocation_PATH",
+    stationThemesFileLocation = "stationThemesFileLocation_PATH",
+    localPublicFolder = __dirname + "/localClient";
 var presetsFileLocation = path.normalize(interstellarFolder + "/userPrefs/presets.json");
 var startupPrefsFileLocation = path.normalize(interstellarFolder + "/userPrefs/startupPrefs.json");
 
@@ -79,14 +84,15 @@ if (!fs.existsSync(startupPrefsFileLocation)) {
 }
 initRequiredFolders();
 
-var downloadsFolderDoesExist = false;
-var screensFolderDoesExist = false;
-var isCoreStation = false;
-var cardsFolderDoesExist = false;
-var interstellarAppServer = undefined;
-var autoLaunchTime = 15000;
-var doAutoLaunch = true;
-var instantLaunch = false;
+var downloadsFolderDoesExist = false,
+    screensFolderDoesExist = false,
+    isCoreStation = false,
+    cardsFolderDoesExist = false,
+    interstellarAppServer = undefined,
+    autoLaunchTime = 15000,
+    doAutoLaunch = true,
+    themeName = "isometric",
+    instantLaunch = false;
 
 function initRequiredFolders() {
     if (!fs.existsSync(cardFolderLocation)) {
@@ -121,9 +127,10 @@ function initApp() {
     var presetManager = require('./modules/presetManager');
     //end of modules
     var menu;
-    var menuHasBeenDownloaded = false;
-    var stationHasBeenDownloaded = false;
-    var developer_mode = false;
+    var menuHasBeenDownloaded = false,
+        stationHasBeenDownloaded = false,
+        themeHasBeenDownloaded = true,
+        developer_mode = false;
 
     var stationScreens = [];
 
@@ -140,18 +147,18 @@ function initApp() {
     var allStations;
     var dateInstalledByLog;
 
-    const computerBeepFolder = __dirname + '/public/computerBeeps';
-    const errorSFXFolder = __dirname + '/public/errors';
+    var computerBeepFolder = '/public/computerBeeps';
+    var errorSFXFolder = '/public/errors';
 
     //const container1GUILocation = '/public/LCARS-background-3.png';
-    const container1GUILocation = '/public/box1.png';
-    const container2GUILocation = '/public/box2.png';
-    const container3GUILocation = '/public/box3.png';
-    const container4GUILocation = '/public/box4.png';
+    var container1GUILocation = '/public/box1.png';
+    var container2GUILocation = '/public/box2.png';
+    var container3GUILocation = '/public/box3.png';
+    var container4GUILocation = '/public/box4.png';
 
 
-    const background1Location = "/public/background1.png";
-    const background2Location = "/public/background2.png";
+    var background1Location = "/public/background1.png";
+    var background2Location = "/public/background2.png";
 
     var computerBeeps = [];
     var errorSFX = [];
@@ -224,49 +231,13 @@ function initApp() {
                     setAdminPassword("password");
                 }
             }
-            fs.readdir(computerBeepFolder, (err, files) => {
-
-                if (err) {
-                    console.log(mainProcessMessage + "ERROR FINDING COMPUTER BEEP NOISES: ".error + err.toString().error)
-                } else {
-                    if (files.length > 0) {
-                        files.forEach(file => {
-                            if (file == ".DS_Store") {
-                                return;
-                            }
-                            console.log(mainProcessMessage + "[" + "INDEXED".info + "] " + file + " found in '" + computerBeepFolder + "'");
-                            computerBeeps.splice(computerBeeps.length, 0, file);
-                        });
-                    } else {
-                        console.log(mainProcessMessage + "NO COMPUTER BEEPS WERE FOUND IN '".error + computerBeepFolder.input + "'".error);
-                    }
-                }
-            });
-            fs.readdir(errorSFXFolder, (err, files) => {
-
-                if (err) {
-                    console.log(mainProcessMessage + "ERROR FINDING COMPUTER ERRROR_SFX NOISES: ".error + err.toString().error)
-                } else {
-                    if (files.length > 0) {
-                        files.forEach(file => {
-                            if (file == ".DS_Store") {
-                                return;
-                            }
-                            console.log(mainProcessMessage + "[" + "INDEXED".info + "] " + file + " found in '" + errorSFXFolder + "'");
-                            errorSFX.splice(computerBeeps.length, 0, file);
-                        });
-                    } else {
-                        console.log(mainProcessMessage + "NO ERRORS_SFX WERE FOUND IN '".error + errorSFXFolder.input + "'".error);
-                    }
-                }
-            });
             console.log(mainProcessMessage + "Connecting to server at address '" + serverAddress + ":" + serverPort + "'");
             var socketConnectionAddress = "http://" + serverAddress + ":" + serverPort;
             var socket = io.connect(socketConnectionAddress, {
                 'reconnection': true
             });
             //init the card manager (See function init in card manager)
-            cardManager.init(cardFolderLocation, screenFolderLocation, downloadFolderLocation);
+            cardManager.init(cardFolderLocation, screenFolderLocation, downloadFolderLocation,themeFolderLocation);
             //create a new browserWindow, with the width of 400, height of 400, transparent background and no frame (loading screen)
             openLoadingWindow(function(window) {
                 openBrowsers.push(window);
@@ -283,7 +254,7 @@ function initApp() {
                 } else {
                     mainWindow = openBrowsers[0];
                 }
-                mainWindow.loadURL('file://' + __dirname + "/public/grabStations.html");
+                mainWindow.loadURL('file://' + publicPathLocation + "/grabStations.html");
             });
 
             socket.on('disconnect', function(data) {
@@ -327,6 +298,51 @@ function initApp() {
                     console.log(mainProcessMessage + "relaunching application....".info);
                     restartInterstellarApp();
                 })
+            });
+
+            //when we recieve the theme 
+            socket.on("recieveThemeFiles",function(data){
+                //download la theme
+                cardManager.downloadTheme(data,function(){
+                    publicPathLocation = path.normalize(interstellarFolder + "/port" + portNumber + "/" + data.folderName + "/" + themeName);
+                    fs.readdir(publicPathLocation + computerBeepFolder, (err, files) => {
+                        if (err) {
+                            console.log(mainProcessMessage + "ERROR FINDING COMPUTER BEEP NOISES: ".error + err.toString().error)
+                        } else {
+                            if (files.length > 0) {
+                                files.forEach(file => {
+                                    if (file == ".DS_Store") {
+                                        return;
+                                    }
+                                    console.log(mainProcessMessage + "[" + "INDEXED".info + "] " + file + " found in '" + computerBeepFolder + "'");
+                                    computerBeeps.splice(computerBeeps.length, 0, file);
+                                });
+                            } else {
+                                console.log(mainProcessMessage + "NO COMPUTER BEEPS WERE FOUND IN '".error + computerBeepFolder.input + "'".error);
+                            }
+                        }
+                    });
+                    fs.readdir(publicPathLocation + errorSFXFolder, (err, files) => {
+
+                        if (err) {
+                            console.log(mainProcessMessage + "ERROR FINDING COMPUTER ERRROR_SFX NOISES: ".error + err.toString().error)
+                        } else {
+                            if (files.length > 0) {
+                                files.forEach(file => {
+                                    if (file == ".DS_Store") {
+                                        return;
+                                    }
+                                    console.log(mainProcessMessage + "[" + "INDEXED".info + "] " + file + " found in '" + errorSFXFolder + "'");
+                                    errorSFX.splice(computerBeeps.length, 0, file);
+                                });
+                            } else {
+                                console.log(mainProcessMessage + "NO ERRORS_SFX WERE FOUND IN '".error + errorSFXFolder.input + "'".error);
+                            }
+                        }
+                    });
+                    themeHasBeenDownloaded = true;
+                    startStation();
+                });
             });
 
             //when we recieve the cards (this should be sent automatically, after the server detects a connection)
@@ -435,8 +451,8 @@ function initApp() {
                             }
                         }
                     });
-                })
-            })
+                });
+            });
             //if a card ever requests a resource from it's folder
             interstellarApp.get("/resource", function(req, res) {
                 //first find which card it is
@@ -458,7 +474,7 @@ function initApp() {
             });
             interstellarApp.get("/soundEffects", function(req, res) {
                 console.log(mainProcessMessage + "Playing sound effect '" + req.query.soundEffect + "'");
-                res.sendFile(__dirname + "/public/soundEffects/" + req.query.soundEffect);
+                res.sendFile(publicPathLocation + "/public/soundEffects/" + req.query.soundEffect);
             });
             interstellarApp.get("/InterstellarLibraries", function(req, res) {
                 res.sendFile(__dirname + "/interstellarLibraries.js");
@@ -467,54 +483,54 @@ function initApp() {
                 res.sendFile(__dirname + "/interstellarUI.js");
             })
             interstellarApp.get("/arrow", function(req, res) {
-                res.sendFile(__dirname + "/public/arrow.png");
+                res.sendFile(publicPathLocation + "/public/arrow.png");
             })
             interstellarApp.get("/ship", function(req, res) {
                 console.log(mainProcessMessage + "Requesting file '" + req.query.file.toString().input + "'");
-                res.sendFile(__dirname + "/public/ship/" + req.query.file);
+                res.sendFile(publicPathLocation + "/public/ship/" + req.query.file);
             });
             interstellarApp.get("/container1", function(req, res) {
                 console.log(mainProcessMessage + "Loading container1 GUI...");
-                res.sendFile(__dirname + container1GUILocation);
+                res.sendFile(publicPathLocation + container1GUILocation);
             })
             interstellarApp.get("/container2", function(req, res) {
                 console.log(mainProcessMessage + "Loading container2 GUI...");
-                res.sendFile(__dirname + container2GUILocation);
+                res.sendFile(publicPathLocation + container2GUILocation);
             })
             interstellarApp.get("/container3", function(req, res) {
                 console.log(mainProcessMessage + "Loading container3 GUI...");
-                res.sendFile(__dirname + container3GUILocation);
+                res.sendFile(publicPathLocation  +  container3GUILocation);
             })
             interstellarApp.get("/container4", function(req, res) {
                 console.log(mainProcessMessage + "Loading container4 GUI...");
-                res.sendFile(__dirname + container4GUILocation);
+                res.sendFile(publicPathLocation + container4GUILocation);
             })
             interstellarApp.get("/background1", function(req, res) {
                 console.log(mainProcessMessage + "Loading background1...");
-                res.sendFile(__dirname + background1Location);
+                res.sendFile(publicPathLocation + background1Location);
             })
             interstellarApp.get("/background2", function(req, res) {
                 console.log(mainProcessMessage + "Loading background2...");
-                res.sendFile(__dirname + background2Location);
+                res.sendFile(publicPathLocation + background2Location);
             })
             interstellarApp.get("/jquery", function(req, res) {
                 console.log(mainProcessMessage + "loading jquery");
                 res.sendFile(__dirname + "/node_modules/jquery/dist/jquery.min.js");
             })
             interstellarApp.get("/stationThemes", function(req, res) {
-                res.sendFile(__dirname + "/stationThemes.css");
+                res.sendFile(publicPathLocation + "/stationThemes.css");
             });
             interstellarApp.get("/randomBeep", function(req, res) {
                 var randomNumber = Math.random() * (computerBeeps.length - 1);
                 randomNumber = Math.round(randomNumber);
                 console.log(mainProcessMessage + "Playing beep '" + computerBeeps[randomNumber] + "' (index " + randomNumber + ")")
-                res.sendFile(computerBeepFolder + "/" + computerBeeps[randomNumber]);
+                res.sendFile(publicPathLocation + computerBeepFolder + "/" + computerBeeps[randomNumber]);
             });
             interstellarApp.get("/randomError", function(req, res) {
                 var randomNumber = Math.random() * (errorSFX.length - 1);
                 randomNumber = Math.round(randomNumber);
                 console.log(mainProcessMessage + "Playing error '" + errorSFX[randomNumber] + "' (index " + randomNumber + ")")
-                res.sendFile(errorSFXFolder + "/" + errorSFX[randomNumber]);
+                res.sendFile(publicPathLocation + errorSFXFolder + "/" + errorSFX[randomNumber]);
             });
             interstellarApp.get("/core", function(req, res) {
                 var path = screenFolderLocation + "/coreView.ejs";
@@ -530,7 +546,7 @@ function initApp() {
                 }
             });
             interstellarApp.get("/coreThemes", function(req, res) {
-                res.sendFile(__dirname + "/coreThemes.css");
+                res.sendFile(publicPathLocation + "/coreThemes.css");
             });
             interstellarApp.get("/threeJS", function(req, res) {
                 if (req.query.file == undefined) {
@@ -560,6 +576,9 @@ function initApp() {
                     }
                 }
                 console.log(mainProcessMessage + req.query.card + " NOT FOUND".error);
+            });
+            socket.on('recieveThemeFiles',function(socketData){
+
             });
             socket.on('stationsSent', function(stations) {
                 allStations = stations;
@@ -640,12 +659,14 @@ function initApp() {
                     transparent: true
                 });
                 //load the loading screen on the browser window
-                loadingScreen.loadURL('file://' + __dirname + "/public/loadingStation.html");
+                loadingScreen.loadURL('file://' + localPublicFolder + "/loadingStation.html");
                 //close the stationServerSelectWindow, so the user doesn't try to load another station
                 closeAllWindows();
                 openBrowsers.push(loadingScreen);
                 //now we need to ask the server what screens we have, and download those all now
                 socket.emit('getCards', data);
+                //we also need the theme
+                socket.emit('getThemeFiles', themeName);
             });
 
             function closeAllWindows() {
@@ -732,14 +753,16 @@ function initApp() {
             }
 
             function startStation() {
-                if (menuHasBeenDownloaded == true && stationHasBeenDownloaded == true) {
+                if (menuHasBeenDownloaded == true && stationHasBeenDownloaded == true && themeHasBeenDownloaded == true) {
                     stationBrowser.loadURL("http://localhost:" + portNumber + "/card?card=" + cards[0]);
                     console.log(mainProcessMessage + "LOADING FIRST CARD NOW".bold);
                 } else {
                     if (menuHasBeenDownloaded == true) {
                         console.log(mainProcessMessage + "Waiting to download station cards before launching...".blue);
-                    } else {
+                    } else if(stationHasBeenDownloaded){
                         console.log(mainProcessMessage + "Waiting to download menu before launching...".blue);
+                    }else{
+                        console.log(mainProcessMessage + "Waiting to download theme before launching...".blue);
                     }
                 }
             }
@@ -787,7 +810,7 @@ function initApp() {
                 //don't allow the user to resize
                 mainWindow.setResizable(false);
                 //load the actual loading screen html
-                mainWindow.loadURL('file://' + __dirname + "/public/findingServer.html");
+                mainWindow.loadURL('file://' + publicPathLocation + "/findingServer.html");
                 callback(mainWindow);
             }
 
@@ -796,7 +819,7 @@ function initApp() {
                 //load the screen that tells the user not to touch anything
                 mainWindow.setFullScreen(true);
 
-                mainWindow.loadURL('file://' + __dirname + "/public/stationOfflineView.html");
+                mainWindow.loadURL('file://' + publicPathLocation + "/stationOfflineView.html");
                 callback(mainWindow);
             }
 
@@ -804,6 +827,7 @@ function initApp() {
                 socket.removeListener('grabStations');
                 socket.removeListener('recieveCardFiles');
                 socket.removeListener('recieveCards');
+                socket.removeListener('recieveThemeFiles');
                 socket.removeListener('stationsSent');
                 socket.removeListener('connect');
             }
