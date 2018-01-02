@@ -22,6 +22,11 @@ colors.setTheme({
 });
 
 
+//do NOT let this application be throttled, the client always needs
+//to be ready to respond to a database update, regardless if it is the foremost
+//application or not.  This may disable sleeping on the client's computer, however.
+electron.powerSaveBlocker.start('prevent-app-suspension');
+
 var loadingScreen,
     portNumber = 3075,
     serverAddress = "localhost",
