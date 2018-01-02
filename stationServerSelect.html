@@ -494,7 +494,7 @@
     			//use a for loop to cycle through the name of each station
           $("#stationSelect").append("<optgroup label=\"Core Stations\">");
           for(var i = 0; i < response.length;i++){
-            if(response[i].stationType == "core")
+            if(response[i].stationType == "core station")
               $("#stationSelect").append("<option>" + response[i].stationInfo.name + "</option>");
 
           }

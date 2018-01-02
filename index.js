@@ -398,7 +398,7 @@ function initApp() {
                         for (var i = 0; i < allStations.length; i++) {
                             var message;
                             if (allStations[i].stationInfo.name == station) {
-                                if (allStations[i].stationType == "station") {
+                                if (allStations[i].stationType == "bridge station") {
                                     //bridge station
                                     message = "Entering Bridge Station Mode";
                                     console.log(mainProcessMessage + message.info);
