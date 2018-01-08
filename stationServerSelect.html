@@ -319,12 +319,12 @@
       autoLaunchTimer = setInterval(function(){
         timePassed++;
         if((timeRequired - timePassed) <= 6){
-          $("#timeUntilAutoLaunch").html("Time until auto launch: " + (timeRequired - timePassed) + " seconds... Change screen to abort...");
+          $("#timeUntilAutoLaunch").html("Auto-Launch in T-Minus: " + (timeRequired - timePassed) + " Seconds...<br />(Change screen to abort...)");
           if((timeRequired - timePassed) <= 3){
             $("#timeUntilAutoLaunch").css("color","red");
           }
         }else{
-          $("#timeUntilAutoLaunch").html("Time until auto launch: " + (timeRequired - timePassed) + " seconds...");
+          $("#timeUntilAutoLaunch").html("Auto-Launch in T-Minus: " + (timeRequired - timePassed) + " Seconds...");
         }
         if(timePassed >= timeRequired){
           if(autoLaunchTimer != undefined){
@@ -332,10 +332,10 @@
             autoLaunchTimer = undefined;
           }
           var stationSelected = $('#stationSelect :selected').text();
-      //send an ipc action alerting index.js that this station has been selected
-      ipc.send('loginStation', stationSelected);
-    }
-  },1000);
+          //send an ipc action alerting index.js that this station has been selected
+          ipc.send('loginStation', stationSelected);
+        }
+      },1000);
     }
   });
 
@@ -463,13 +463,13 @@
     		//set autofocus back on the submit button
     		$("#launchButton").focus();
     	});
-       $("#stationSelect").on("change",function(){
+       $("#stationSelect").on("click",function(){
         ipc.send("stationPresetDidChange",$('#stationSelect :selected').text())
         if(autoLaunchTimer != undefined){
           clearInterval(autoLaunchTimer);
           autoLaunchTimer = undefined;
         }
-        $("#timeUntilAutoLaunch").html("Auto launch aborted");
+        $("#timeUntilAutoLaunch").html("Auto Launch Aborted");
         setTimeout(function(){
           $("#timeUntilAutoLaunch").fadeOut(2000);
         },3000);
@@ -500,7 +500,7 @@
           }
           $("#stationSelect").append("<optgroup label=\"Bridge Stations\">");
           for(var j = 0; j < response.length;j++){
-            if(response[j].stationType != "core"){
+            if(response[j].stationType != "core station"){
               $("#stationSelect").append("<option>" + response[j].stationInfo.name + "</option>");
               //add this station to the stationSelect dropdown menu
             }

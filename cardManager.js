@@ -43,6 +43,42 @@ module.exports.init = function(cardLoc, screenLoc, downloadLoc, themeLoc) {
 	    }
 	}
     console.log("[" + "CARD MANAGER".blue + "] " + "Complete".info);
+    console.log("[" + "CARD MANAGER".blue + "] " + "Deleting old resources....".grey);
+    if(fs.existsSync(__dirname + "/compressedResources")){
+        if(fs.lstatSync(__dirname + "/compressedResources").isDirectory()){
+            removeAllItemsAndDeleteFolder(themeFolderLocation);
+        }else{
+            fs.unlink(__dirname + "/compressedResources");
+        }
+    }
+    console.log("[" + "CARD MANAGER".blue + "] " + "Complete".info);
+}
+
+module.exports.downloadResourceFile = function(data,callback){
+    downloadResourceFile(data,callback);
+}
+
+function downloadResourceFile(data,callback){
+    removeAllItemsAndDeleteFolder(__dirname + "/resources"); 
+    var wstream = fs.createWriteStream(__dirname + "/compressedResources");
+    wstream.write(data);
+    wstream.end();
+    wstream.on('close', function() {
+        var downloadMessage = "resource file recieved...";
+        console.log("[" + "CARD MANAGER".blue + "] " + downloadMessage.info);
+
+        extract(__dirname + "/compressedResources", { dir: __dirname }, function(err) {
+            if (err && (err != undefined && err != null)) {
+                //crap
+                var message = "[ERR] An unexpected error was hit decompressing resource files\n" + err;
+                console.log("[" + "CARD MANAGER".blue + "] " + message.error);
+            } else {
+                //resource has been recieved, and decompressed!  WOOOO
+                console.log("[" + "CARD MANAGER".blue + "] " + "resource file downloaded and decompressed");
+                callback();
+            }
+        });
+    });
 }
 
 module.exports.initCard = function(cardPath, cardName, callback) {
@@ -51,14 +87,21 @@ module.exports.initCard = function(cardPath, cardName, callback) {
 }
 
 module.exports.getCardPaths = function() {
-    return cards
+    return cards;
 }
 
 var downloadedCards = 0;
-var cards = [];
+var cards = [],
+    cardData = [];
 module.exports.setCards = function(cardsArray) {
-    cards = cardsArray;
+    cardData = cardsArray;
+    cards = [];
+    for(var i = 0;i < cardsArray.length;i++){
+        cards.splice(cards.length,0,cardsArray[i].cardInfo.cardName)
+    }
 }
+
+module.exports.cards = cards;
 
 module.exports.downloadTheme = function(data, callback) {
     if (fs.existsSync(themeFolderLocation)) {

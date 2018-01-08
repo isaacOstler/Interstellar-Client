@@ -73,6 +73,7 @@ var downloadFolderLocation = path.normalize(interstellarFolder + "/port" + portN
 var publicPathLocation = "THEME_FILE_PATH",
     coreThemesFileLocation = "coreThemesFileLocation_PATH",
     stationThemesFileLocation = "stationThemesFileLocation_PATH",
+    resourceDirectoryLocation = __dirname + "/resource/";
     localPublicFolder = __dirname + "/localClient";
 var presetsFileLocation = path.normalize(interstellarFolder + "/userPrefs/presets.json");
 var startupPrefsFileLocation = path.normalize(interstellarFolder + "/userPrefs/startupPrefs.json");
@@ -174,6 +175,9 @@ function initApp() {
     var downloadedCards = 0;
     var userPrefs = {};
 
+    //init the card manager (See function init in card manager)
+    cardManager.init(cardFolderLocation, screenFolderLocation, downloadFolderLocation,themeFolderLocation);
+
     app.on('ready', function() {
         jsonfile.readFile(startupPrefsFileLocation, function(err, obj) {
             if (err) {
@@ -241,8 +245,6 @@ function initApp() {
             var socket = io.connect(socketConnectionAddress, {
                 'reconnection': true
             });
-            //init the card manager (See function init in card manager)
-            cardManager.init(cardFolderLocation, screenFolderLocation, downloadFolderLocation,themeFolderLocation);
             //create a new browserWindow, with the width of 400, height of 400, transparent background and no frame (loading screen)
             openLoadingWindow(function(window) {
                 openBrowsers.push(window);
@@ -252,14 +254,10 @@ function initApp() {
             socket.on('connect', function(connectedSocket) {
                 console.log(mainProcessMessage + 'Connected to server!'.info);
                 //we have connected to the server
-                //load the grabStations html page, to allow the user to choose which station they want to launch
-                var mainWindow;
-                if (openBrowsers.length == 0) {
-                    mainWindow = openLoadingWindow();
-                } else {
-                    mainWindow = openBrowsers[0];
-                }
-                mainWindow.loadURL('file://' + __dirname + "/localPublic/grabStations.html");
+
+
+                //first we need to download the resource files
+                socket.emit('getResourceFiles');
             });
 
             socket.on('disconnect', function(data) {
@@ -358,7 +356,7 @@ function initApp() {
                 cards = data;
                 //cycle through each card and ask the server to send the actual card files
                 for (var i = 0; i < data.length; i++) {
-                    socket.emit('getCardFiles', data[i]);
+                    socket.emit('getCardFiles', data[i].cardInfo.cardName);
                 }
             });
             //when we recieve the actual card files, (data is a buffer stream of the zipped files)
@@ -403,7 +401,12 @@ function initApp() {
                                     message = "Entering Bridge Station Mode";
                                     console.log(mainProcessMessage + message.info);
                                     console.log(mainProcessMessage + "Cards are " + cards);
-                                    currentScreen = cards[0];
+                                    for(var x = 0;x < cards.length;x++){
+                                        if(cards[x].cardInfo.cardType != "card controller"){
+                                            currentScreen = cards[x].cardInfo.cardName;
+                                            break;
+                                        }
+                                    }
                                     message = "Current screen set to: " + currentScreen;
                                     console.log(mainProcessMessage + message.blue);
                                     socket.emit("getMenu");
@@ -420,7 +423,7 @@ function initApp() {
                                             for (var i = 0; i < cards.length; i++) {
                                                 var cardPath = "";
                                                 for (var j = 0; j < cardLocations.length; j++) {
-                                                    if (cardLocations[j].name = cards[i]) {
+                                                    if (cardLocations[j].name = cards[i].cardInfo.cardName) {
                                                         cardPath = cardLocations[j].name;
                                                     }
                                                 }
@@ -488,14 +491,14 @@ function initApp() {
                 res.sendFile(publicPathLocation + "/public/soundEffects/" + req.query.soundEffect);
             });
             interstellarApp.get("/InterstellarLibraries", function(req, res) {
-                res.sendFile(__dirname + "/interstellarLibraries.js");
-            })
+                res.sendFile(resourceDirectoryLocation + "/interstellarLibraries.js");
+            });
             interstellarApp.get("/InterstellarUI", function(req, res) {
-                res.sendFile(__dirname + "/interstellarUI.js");
-            })
+                res.sendFile(resourceDirectoryLocation + "/interstellarUI.js");
+            });
             interstellarApp.get("/arrow", function(req, res) {
                 res.sendFile(publicPathLocation + "/public/arrow.png");
-            })
+            });
             interstellarApp.get("/ship", function(req, res) {
                 console.log(mainProcessMessage + "Requesting file '" + req.query.file.toString().input + "'");
                 res.sendFile(publicPathLocation + "/public/ship/" + req.query.file);
@@ -503,31 +506,31 @@ function initApp() {
             interstellarApp.get("/container1", function(req, res) {
                 console.log(mainProcessMessage + "Loading container1 GUI...");
                 res.sendFile(publicPathLocation + container1GUILocation);
-            })
+            });
             interstellarApp.get("/container2", function(req, res) {
                 console.log(mainProcessMessage + "Loading container2 GUI...");
                 res.sendFile(publicPathLocation + container2GUILocation);
-            })
+            });
             interstellarApp.get("/container3", function(req, res) {
                 console.log(mainProcessMessage + "Loading container3 GUI...");
                 res.sendFile(publicPathLocation  +  container3GUILocation);
-            })
+            });
             interstellarApp.get("/container4", function(req, res) {
                 console.log(mainProcessMessage + "Loading container4 GUI...");
                 res.sendFile(publicPathLocation + container4GUILocation);
-            })
+            });
             interstellarApp.get("/background1", function(req, res) {
                 console.log(mainProcessMessage + "Loading background1...");
                 res.sendFile(publicPathLocation + background1Location);
-            })
+            });
             interstellarApp.get("/background2", function(req, res) {
                 console.log(mainProcessMessage + "Loading background2...");
                 res.sendFile(publicPathLocation + background2Location);
-            })
+            });
             interstellarApp.get("/jquery", function(req, res) {
                 console.log(mainProcessMessage + "loading jquery");
-                res.sendFile(__dirname + "/node_modules/jquery/dist/jquery.min.js");
-            })
+                res.sendFile(resourceDirectoryLocation + "jquery.js");
+            });
             interstellarApp.get("/stationThemes", function(req, res) {
                 res.sendFile(publicPathLocation + "/stationThemes.css");
             });
@@ -551,7 +554,7 @@ function initApp() {
             });
             interstellarApp.get("/stationScreen", function(req, res) {
                 for (var i = 0; i < cards.length; i++) {
-                    if (cards[i] == currentScreen) {
+                    if (cards[i].cardInfo.cardName == currentScreen) {
                         res.send(stationScreens[i]);
                     }
                 }
@@ -562,34 +565,43 @@ function initApp() {
             interstellarApp.get("/threeJS", function(req, res) {
                 if (req.query.file == undefined) {
                     console.log(mainProcessMessage + "Loading three.min.js");
-                    res.sendFile(__dirname + "/modules/three.min.js");
+                    res.sendFile(resourceDirectoryLocation + "three.min.js");
                 } else {
                     console.log(mainProcessMessage + "Loading three.js asset '" + req.query.file + "'");
-                    res.sendFile(__dirname + "/modules/threeJSLibraries/" + req.query.file);
+                    res.sendFile(resourceDirectoryLocation + "threeJSLibraries/" + req.query.file);
                 }
             });
 
             interstellarApp.get("/card", function(req, res) {
                 for (var i = 0; i < cards.length; i++) {
-                    console.log(mainProcessMessage + cards[i] + " is found at index " + i + " of " + (cards.length - 1) + " possible indexes");
-                    if (cards[i] == req.query.card) {
+                    console.log(mainProcessMessage + cards[i].cardInfo.cardName + " is found at index " + i + " of " + (cards.length - 1) + " possible indexes");
+                    if (cards[i].cardInfo.cardName == req.query.card) {
                         if (req.query.card != "menu") {
-                            currentScreen = cards[i];
-                            var consoleMessage = "'" + cards[i] + "' screen";
-                            var path = screenFolderLocation + "/" + cards[i] + ".ejs";
+                            currentScreen = cards[i].cardInfo.cardName;
+                            var consoleMessage = "'" + cards[i].cardInfo.cardName + "' screen";
+                            var path = screenFolderLocation + "/" + cards[i].cardInfo.cardName + ".ejs";
                             console.log(mainProcessMessage + station + " changed screens to " + consoleMessage.bold + "\nat path '" + path + "'");
                             res.render(path);
                         } else {
                             console.log(mainProcessMessage + "rendering menu....".blue);
-                            res.render(screenFolderLocation + "/client.ejs", { "screens": cards });
+
+                            res.render(screenFolderLocation + "/client.ejs", { "screens": cardManager.cards });
                         }
                         return;
                     }
                 }
                 console.log(mainProcessMessage + req.query.card + " NOT FOUND".error);
             });
-            socket.on('recieveThemeFiles',function(socketData){
-
+            socket.on('recieveResourceFiles',function(socketData){
+                cardManager.downloadResourceFile(socketData,function(){
+                    //load the grabStations html page, to allow the user to choose which station they want to launch
+                    var mainWindow;
+                    if (openBrowsers.length == 0) {
+                        mainWindow = openLoadingWindow();
+                    } else {
+                        mainWindow = openBrowsers[0];
+                    }
+                });
             });
             socket.on('stationsSent', function(stations) {
                 allStations = stations;
@@ -701,26 +713,36 @@ function initApp() {
                     for (var j = 0; j < cards.length; j++) {
                         if (!err) {
                             var prefixAndSuffixOfHTMLFile = data.split("~*~");
-                            var newHTML = prefixAndSuffixOfHTMLFile[0];
+                            var newHTML = prefixAndSuffixOfHTMLFile[0],
+                                cardControllers = "";
 
                             newHTML += "<% var screens = [";
+
                             for (var i = 0; i < cards.length; i++) {
-                                newHTML += "\"" + cards[i] + "\"";
-                                if (i != cards.length - 1) {
-                                    newHTML += ",";
+                                if(cards[i].cardInfo.cardType != "card controller"){
+                                    newHTML += "\"" + cards[i].cardInfo.cardName + "\"";
+                                    if (i != cards.length - 1) {
+                                        newHTML += ",";
+                                    }
+                                }
+                                    console.log("\n\n\n\n\n" + cards[i].cardInfo.cardType + "\n\n\n".error);
+                                if(cards[i].cardInfo.cardType == "card controller"){
+                                    cardControllers += "<% include " + cardFolderLocation + "/" + cards[i].cardInfo.cardName + "/cards/" + cards[i].cardInfo.cardName + "/client.ejs %>";
                                 }
                             }
                             newHTML += "] %>";
                             //newHTML += "<% card %>";
-                            var path = cardFolderLocation + "/" + cards[j] + "/cards/" + cards[j] + "/client.ejs";
                             newHTML += "<% include " + cardFolderLocation + "/menu/cards/menu/client.ejs %>";
+                            var path = cardFolderLocation + "/" + cards[j].cardInfo.cardName + "/cards/" + cards[j].cardInfo.cardName + "/client.ejs";
                             newHTML += "<% include " + path + " %>";
+
+                            newHTML += cardControllers;
 
                             newHTML += prefixAndSuffixOfHTMLFile[1];
                             stationScreens[j] = newHTML;
-                            console.log(mainProcessMessage + cards[j] + " Screen Generated");
+                            console.log(mainProcessMessage + cards[j].cardInfo.cardName + " Screen Generated");
 
-                            fs.writeFile(screenFolderLocation + "/" + cards[j] + ".ejs", newHTML, function(err) {
+                            fs.writeFile(screenFolderLocation + "/" + cards[j].cardInfo.cardName + ".ejs", newHTML, function(err) {
                                 downloadedCards++;
                                 if (err) {
                                     return console.log(err.err);
@@ -752,7 +774,7 @@ function initApp() {
                                     //close the loading screen, since we are done with it.
                                     closeAllWindows();
                                     openBrowsers.push(stationBrowser);
-                                    var consoleMessage = "LOADING " + cards[0] + " SCREEN!".bold;
+                                    var consoleMessage = "LOADING " + currentScreen + " SCREEN!".bold;
                                     console.log(mainProcessMessage + consoleMessage.bold);
                                     stationHasBeenDownloaded = true;
                                     startStation();
@@ -765,7 +787,7 @@ function initApp() {
 
             function startStation() {
                 if (menuHasBeenDownloaded == true && stationHasBeenDownloaded == true && themeHasBeenDownloaded == true) {
-                    stationBrowser.loadURL("http://localhost:" + portNumber + "/card?card=" + cards[0]);
+                    stationBrowser.loadURL("http://localhost:" + portNumber + "/card?card=" + currentScreen);
                     console.log(mainProcessMessage + "LOADING FIRST CARD NOW".bold);
                 } else {
                     if (menuHasBeenDownloaded == true) {
@@ -813,6 +835,7 @@ function initApp() {
                 var mainWindow = new BrowserWindow({
                     width: 400,
                     height: 400,
+                    fullScreen : false,
                     frame: false,
                     transparent: true
                 });
