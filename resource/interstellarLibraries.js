@@ -800,7 +800,7 @@ var Interstellar_SpellCheck = function(){
 	 */
 	var remote = require('electron').remote;
 	var webFrame = require('electron').webFrame;
-	var SpellCheckProvider = require('electron-spell-check-provider');
+	var SpellCheckProvider = remote.require('electron-spell-check-provider');
 	// `remote.require` since `Menu` is a main-process module.
 	var buildEditorContextMenu = remote.require('electron-editor-context-menu');
 	 
@@ -828,9 +828,10 @@ var Interstellar_SpellCheck = function(){
 	    // may sometimes re-run the spell-check provider for an outdated selection e.g. if the user
 	    // right-clicks some misspelled text and then an image.
 	    if (window.getSelection().toString()) {
-	      selection.isMisspelled = true;
-	      // Take the first three suggestions if any.
-	      selection.spellingSuggestions = suggestions.slice(0, 3);
+	      	selection.isMisspelled = true;
+	      	// Take the first three suggestions if any.
+	      	selection.spellingSuggestions = suggestions.slice(0, 3);
+	  		var menu = buildEditorContextMenu(selection);
 	    }
 	  }));
 	 
@@ -838,12 +839,11 @@ var Interstellar_SpellCheck = function(){
 	  // Only show the context menu in text editors.
 	  if (!e.target.closest('textarea, input, [contenteditable="true"]')) return;
 	 
-	  var menu = buildEditorContextMenu(selection);
-	 
 	  // The 'contextmenu' event is emitted after 'selectionchange' has fired but possibly before the
 	  // visible selection has changed. Try to wait to show the menu until after that, otherwise the
 	  // visible selection will update after the menu dismisses and look weird.
 	  setTimeout(function() {
+	  	var menu = buildEditorContextMenu(selection);
 	    menu.popup(remote.getCurrentWindow());
 	  }, 30);
 	});

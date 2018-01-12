@@ -5,10 +5,16 @@
   "description": "A multiplatform framework designed to aid in the development of controls for simulators",
   "main": "index.js",
   "scripts": {
-    "pack": "electron-builder --dir",
-    "dist": "electron-builder",
-    "start": "electron .",
-    "postinstall": "install-app-deps"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": {
+      "publish": [
+        {
+          "provider": "github",
+          "owner": "isaacOstler",
+          "repo": "https://github.com/isaacOstler/Interstellar-Client.git"
+        }
+      ]
+    }
   },
   "keywords": [
     "interstellar",
@@ -29,16 +35,16 @@
     "clear-require": "^2.0.0",
     "colors": "^1.1.2",
     "ejs": "^2.5.7",
+    "electron-editor-context-menu": "^1.1.1",
+    "electron-log": "^2.2.14",
     "electron-spell-check-provider": "^1.1.1",
+    "electron-updater": "^2.18.2",
     "express": "^4.15.3",
     "extract-zip": "^1.6.6",
     "import-fresh": "^2.0.0",
-    "johnny-five": "^0.11.7",
     "jquery": "^3.2.1",
     "jsonfile": "^3.0.1",
     "mkdirp": "^0.5.1",
-    "mongoose": "^4.13.9",
-    "node-pre-gyp": "^0.6.39",
     "node-zip": "^1.1.1",
     "replace-in-file": "^2.6.4",
     "say": "^0.11.0",

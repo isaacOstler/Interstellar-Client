@@ -7,6 +7,8 @@ const electron = require('electron');
 var colors = require('colors');
 var mkdirp = require('mkdirp');
 const path = require('path');
+const {autoUpdater} = require("electron-updater");
+const log = require('electron-log');
 
 colors.setTheme({
     silly: 'rainbow',
@@ -138,6 +140,7 @@ function initApp() {
     var menu;
     var menuHasBeenDownloaded = false,
         stationHasBeenDownloaded = false,
+        resourceFilesHaveBeenDownloaded = false,
         themeHasBeenDownloaded = true,
         developer_mode = false;
 
@@ -610,6 +613,8 @@ function initApp() {
                     } else {
                         mainWindow = openBrowsers[0];
                     }
+                    resourceFilesHaveBeenDownloaded = true;
+                    startStation();
                 });
             });
             socket.on('stationsSent', function(stations) {
@@ -795,7 +800,7 @@ function initApp() {
             }
 
             function startStation() {
-                if (menuHasBeenDownloaded == true && stationHasBeenDownloaded == true && themeHasBeenDownloaded == true) {
+                if (menuHasBeenDownloaded && stationHasBeenDownloaded && themeHasBeenDownloaded && resourceFilesHaveBeenDownloaded) {
                     stationBrowser.loadURL("http://localhost:" + portNumber + "/card?card=" + currentScreen);
                     console.log(mainProcessMessage + "LOADING FIRST CARD NOW".bold);
                 } else {
@@ -803,8 +808,10 @@ function initApp() {
                         console.log(mainProcessMessage + "Waiting to download station cards before launching...".blue);
                     } else if(stationHasBeenDownloaded){
                         console.log(mainProcessMessage + "Waiting to download menu before launching...".blue);
-                    }else{
+                    }else if(themeHasBeenDownloaded){
                         console.log(mainProcessMessage + "Waiting to download theme before launching...".blue);
+                    }else{
+                        console.log(mainProcessMessage + "Waiting to download resource files before launching...".blue);
                     }
                 }
             }

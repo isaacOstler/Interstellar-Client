@@ -468,7 +468,7 @@
           clearInterval(autoLaunchTimer);
           autoLaunchTimer = undefined;
         }
-       })
+       });
        $("#stationSelect").on("change",function(){
         ipc.send("stationPresetDidChange",$('#stationSelect :selected').text())
         $("#timeUntilAutoLaunch").html("Auto Launch Aborted");

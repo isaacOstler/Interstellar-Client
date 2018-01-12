@@ -60,7 +60,13 @@ module.exports.downloadResourceFile = function(data,callback){
 }
 
 function downloadResourceFile(data,callback){
-    removeAllItemsAndDeleteFolder(compressedResources); 
+    if(fs.existsSync(compressedResources)){
+        if(fs.lstatSync(compressedResources).isDirectory()){
+            removeAllItemsAndDeleteFolder(compressedResources);
+        }else{
+            fs.unlink(compressedResources);
+        }
+    }
     var wstream = fs.createWriteStream(compressedResources);
     wstream.write(data);
     wstream.end();

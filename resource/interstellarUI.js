@@ -113,3 +113,11 @@ $(".coreWindowMoveTrigger").mousedown(function(event){
 		$(".INTERSTELLAR_UI_CURRENTLY_SELECTED_CORE_WINDOW_DRAGING_MOUSE_CATCHER").remove(INTERSTELLAR_UI_CURRENTLY_SELECTED_CORE_WINDOW_DRAGING_TARGET);
 	});
 });
+
+document.addEventListener("keydown", function (e) {
+	if (e.ctrlKey && e.shiftKey && e.which === 73) {
+		require('remote').getCurrentWindow().toggleDevTools();
+	} else if (e.ctrlKey && e.which === 69) {
+		location.reload();
+	}
+});
