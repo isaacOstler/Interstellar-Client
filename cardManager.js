@@ -20,10 +20,11 @@ colors.setTheme({
 });
 
 var menuHasBeenDownloaded = false;
-module.exports.init = function(cardLoc, screenLoc, downloadLoc, themeLoc) {
+module.exports.init = function(cardLoc, screenLoc, downloadLoc, compressedLoc, themeLoc) {
     cardFolderLocation = cardLoc;
     screenFolderLocation = screenLoc;
     downloadFolderLocation = downloadLoc;
+    compressedResources = compressedLoc;
     themeFolderLocation = themeLoc;
     console.log("[" + "CARD MANAGER".blue + "] " + "Deleting old downloads....".grey);
     removeAllItemsAndDeleteFolder(downloadLoc);
@@ -44,11 +45,11 @@ module.exports.init = function(cardLoc, screenLoc, downloadLoc, themeLoc) {
 	}
     console.log("[" + "CARD MANAGER".blue + "] " + "Complete".info);
     console.log("[" + "CARD MANAGER".blue + "] " + "Deleting old resources....".grey);
-    if(fs.existsSync(__dirname + "/compressedResources")){
-        if(fs.lstatSync(__dirname + "/compressedResources").isDirectory()){
+    if(fs.existsSync(compressedResources)){
+        if(fs.lstatSync(compressedResources).isDirectory()){
             removeAllItemsAndDeleteFolder(themeFolderLocation);
         }else{
-            fs.unlink(__dirname + "/compressedResources");
+            fs.unlink(compressedResources);
         }
     }
     console.log("[" + "CARD MANAGER".blue + "] " + "Complete".info);
@@ -59,15 +60,15 @@ module.exports.downloadResourceFile = function(data,callback){
 }
 
 function downloadResourceFile(data,callback){
-    removeAllItemsAndDeleteFolder(__dirname + "/resources"); 
-    var wstream = fs.createWriteStream(__dirname + "/compressedResources");
+    removeAllItemsAndDeleteFolder(compressedResources); 
+    var wstream = fs.createWriteStream(compressedResources);
     wstream.write(data);
     wstream.end();
     wstream.on('close', function() {
         var downloadMessage = "resource file recieved...";
         console.log("[" + "CARD MANAGER".blue + "] " + downloadMessage.info);
 
-        extract(__dirname + "/compressedResources", { dir: __dirname }, function(err) {
+        extract(compressedResources, { dir: __dirname }, function(err) {
             if (err && (err != undefined && err != null)) {
                 //crap
                 var message = "[ERR] An unexpected error was hit decompressing resource files\n" + err;

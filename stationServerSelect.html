@@ -464,11 +464,13 @@
     		$("#launchButton").focus();
     	});
        $("#stationSelect").on("click",function(){
-        ipc.send("stationPresetDidChange",$('#stationSelect :selected').text())
         if(autoLaunchTimer != undefined){
           clearInterval(autoLaunchTimer);
           autoLaunchTimer = undefined;
         }
+       })
+       $("#stationSelect").on("change",function(){
+        ipc.send("stationPresetDidChange",$('#stationSelect :selected').text())
         $("#timeUntilAutoLaunch").html("Auto Launch Aborted");
         setTimeout(function(){
           $("#timeUntilAutoLaunch").fadeOut(2000);

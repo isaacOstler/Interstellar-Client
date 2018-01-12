@@ -30,12 +30,14 @@ electron.powerSaveBlocker.start('prevent-app-suspension');
 var loadingScreen,
     portNumber = 3075,
     serverAddress = "localhost",
-    serverPort = 3000;
+    serverPort = 3000,
+    overrideServerAndPort = false;
 
 if (process.argv.length > 2) {
     portNumber = process.argv[2];
 }
 if (process.argv.length > 3) {
+    overrideServerAndPort = true;
     serverAddress = process.argv[3];
 }
 if (process.argv.length > 4) {
@@ -70,6 +72,7 @@ var cardFolderLocation = path.normalize(interstellarFolder + "/port" + portNumbe
 var themeFolderLocation = path.normalize(interstellarFolder + "/port" + portNumber + "/theme"); //"Library/Application Support/interstellar/themes";
 var screenFolderLocation = path.normalize(interstellarFolder + "/port" + portNumber + "/screens"); //"Library/Application Support/interstellar/screens";
 var downloadFolderLocation = path.normalize(interstellarFolder + "/port" + portNumber + "/download"); //"Library/Application Support/interstellar/downloadFolderLocation";
+var compressedResources = path.normalize(interstellarFolder + "/port" + portNumber + "/compressedResources");
 var publicPathLocation = "THEME_FILE_PATH",
     coreThemesFileLocation = "coreThemesFileLocation_PATH",
     stationThemesFileLocation = "stationThemesFileLocation_PATH",
@@ -176,7 +179,7 @@ function initApp() {
     var userPrefs = {};
 
     //init the card manager (See function init in card manager)
-    cardManager.init(cardFolderLocation, screenFolderLocation, downloadFolderLocation,themeFolderLocation);
+    cardManager.init(cardFolderLocation, screenFolderLocation, downloadFolderLocation,compressedResources,themeFolderLocation);
 
     app.on('ready', function() {
         jsonfile.readFile(startupPrefsFileLocation, function(err, obj) {
@@ -198,8 +201,10 @@ function initApp() {
                     }
                 });
             }
-            serverAddress = obj.serverAddress;
-            serverPort = obj.serverPort;
+            if(!overrideServerAndPort){
+                serverAddress = obj.serverAddress;
+                serverPort = obj.serverPort;
+            }
             if (serverAddress == "") {
                 serverAddress = "localhost";
                 serverPort = 3000;
@@ -506,6 +511,10 @@ function initApp() {
             interstellarApp.get("/container1", function(req, res) {
                 console.log(mainProcessMessage + "Loading container1 GUI...");
                 res.sendFile(publicPathLocation + container1GUILocation);
+            });
+            interstellarApp.get("/themeResource", function(req, res) {
+                console.log(mainProcessMessage + "Loading theme resource " + req.query.path + "...");
+                res.sendFile(publicPathLocation + "/" + req.query.path);
             });
             interstellarApp.get("/container2", function(req, res) {
                 console.log(mainProcessMessage + "Loading container2 GUI...");
