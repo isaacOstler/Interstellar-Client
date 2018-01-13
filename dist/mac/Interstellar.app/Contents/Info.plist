@@ -45,6 +45,6 @@
     <key>NSHumanReadableCopyright</key>
     <string>Copyright © 2018 Isaac Ostler</string>
     <key>AsarIntegrity</key>
-    <string>{"checksums":{"app.asar":"18tlrYep6hoAwE2DKs1ksaO3jZ0os8+L01p/FCuLOhZDqG4iYJsAogBPPhD8+yPC6DD66tCvrGnR2gA7GzHbzw==","electron.asar":"N8qMkArPe2Vz78otrpXE3aNxOfCVyD1sqLzLTkMM5HY6Di2N/zv+HQhnv0+XjE/PttdJYymWUm+D0oj39WbLiA=="}}</string>
+    <string>{"checksums":{"app.asar":"FGZ1MX8IZMUUedv8LI3qLXIEUodQBgM+D62ydDTa04+j39kse6WC8WeVFskguxtVRmk/nd8lv2Wzo41ddpi0oQ==","electron.asar":"N8qMkArPe2Vz78otrpXE3aNxOfCVyD1sqLzLTkMM5HY6Di2N/zv+HQhnv0+XjE/PttdJYymWUm+D0oj39WbLiA=="}}</string>
   </dict>
 </plist>

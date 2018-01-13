@@ -1,10 +1,10 @@
 version: 1.0.0
 files:
   - url: Interstellar-1.0.0-mac.zip
-    sha512: fFYdw2du8ac76BHED+A+JhfStR4tv+OadGwLjUNSWfnw5AgVoZQE/eCwgttj7aPJlg0i2Ulq924c/fjL0rxdGw==
+    sha512: k/JjPa6o4GuJBQOOWlTJH5ILmFsW7QfOaZgBizzf19E0+WqN7Zq6wGwWgEPQLBtz6i4A7G0vJwuUNNA9PFLeEQ==
   - url: Interstellar-1.0.0.dmg
-    sha512: iaPgsFmiXssxFe4Nc+7mI3nvDG5kOJ4agJG84q+kOTC5Up/bQIm2a54055v4rfPr8QLlSZDjtOoKPSjZB/dOsQ==
-    size: 53515786
+    sha512: anmX46tN/vaP7p8CRRUly+z7+pMuzuqqe4pQ43lMHKJT8uEHwLEJA1EfDpY7mZIwfrU2ovr2YjzYl2medx8ZtA==
+    size: 53633637
 path: Interstellar-1.0.0-mac.zip
-sha512: fFYdw2du8ac76BHED+A+JhfStR4tv+OadGwLjUNSWfnw5AgVoZQE/eCwgttj7aPJlg0i2Ulq924c/fjL0rxdGw==
-releaseDate: '2018-01-12T17:14:01.651Z'
+sha512: k/JjPa6o4GuJBQOOWlTJH5ILmFsW7QfOaZgBizzf19E0+WqN7Zq6wGwWgEPQLBtz6i4A7G0vJwuUNNA9PFLeEQ==
+releaseDate: '2018-01-12T22:42:07.625Z'
