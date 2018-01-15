@@ -490,7 +490,6 @@ function initApp() {
             });
             //if a card ever requests a local resource
             interstellarApp.get("/localResource", function(req, res) {
-                console.log("\n\n\n\n\n\n");
                 console.log(mainProcessMessage + "LOADING LOCAL RESOURCE " + req.query.path.toString());
                 res.sendFile(__dirname  + "/localPublic/" + req.query.path);
             });
@@ -739,7 +738,6 @@ function initApp() {
                                         newHTML += ",";
                                     }
                                 }
-                                    console.log("\n\n\n\n\n" + cards[i].cardInfo.cardType + "\n\n\n".error);
                                 if(cards[i].cardInfo.cardType == "card controller"){
                                     cardControllers += "<% include " + cardFolderLocation + "/" + cards[i].cardInfo.cardName + "/cards/" + cards[i].cardInfo.cardName + "/client.ejs %>";
                                 }
