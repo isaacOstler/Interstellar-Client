@@ -773,7 +773,8 @@ function initApp() {
                                     isCoreStation = false;
                                     serverFunctionManager.init(ipc, stationBrowser, socket, io, colors, changeStationScreen, station);
                                     stationManager.init(ipc, stationBrowser, socket, changeStationScreen, getAdminPassword, serverFunctionManager);
-
+                                    presetManager.init(ipc, presetsFileLocation, stationBrowser);
+                                    
                                     var cardPaths = cardManager.getCardPaths();
                                     console.log(mainProcessMessage + "loading server scripts...");
                                     for (var i = 0; i < cardPaths.length; i++) {

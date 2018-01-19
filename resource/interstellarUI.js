@@ -121,3 +121,7 @@ document.addEventListener("keydown", function (e) {
 		location.reload();
 	}
 });
+
+$(document).ready(function(){
+	Interstellar.loadCoreLayout();
+});

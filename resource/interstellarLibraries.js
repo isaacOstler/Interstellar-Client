@@ -444,11 +444,27 @@
 
 		var zIndexCounter = 100;
 
+		this.loadCoreLayout = function(){
+			var coreLayouts = this.getPresetValue("coreLayouts.layouts").value;
+			if(coreLayouts == null){
+				return;
+			}
+			for(var i = 0;i < coreLayouts.length;i++){
+				if($('[widgetName="' + coreLayouts[i].widgetName + '"]').length != 0){
+					$('[widgetName="' + coreLayouts[i].widgetName + '"]').css("top",coreLayouts[i].top + "px");
+					$('[widgetName="' + coreLayouts[i].widgetName + '"]').css("left",coreLayouts[i].left + "px");
+					$('[widgetName="' + coreLayouts[i].widgetName + '"]').css("height",coreLayouts[i].height + "px");
+					$('[widgetName="' + coreLayouts[i].widgetName + '"]').css("width",coreLayouts[i].width + "px");
+				}
+			}
+		}
+
 		this.setCoreWidgetMovement = function(state){
 			$(".coreWidgetMoveContainer").off();
 			$(".coreWidget-topResize").off();
 			$(".coreWidget-bottomResize").off();
 			$(".coreWidget-leftResize").off();
+			$(".coreWidget-rightResize").off();
 			$(".coreWidget-topRightCornerResize").off();
 			$(".coreWidget-bottomRightCornerResize").off();
 			$(".coreWidget-bottomLeftCornerResize").off();
@@ -458,6 +474,7 @@
 				$(".coreWidget-topResize").css("display","block");
 				$(".coreWidget-bottomResize").css("display","block");
 				$(".coreWidget-leftResize").css("display","block");
+				$(".coreWidget-rightResize").css("display","block");
 				$(".coreWidget-topRightCornerResize").css("display","block");
 				$(".coreWidget-bottomRightCornerResize").css("display","block");
 				$(".coreWidget-bottomLeftCornerResize").css("display","block");
@@ -687,10 +704,21 @@
 				$(".coreWidget-topResize").css("display","none");
 				$(".coreWidget-bottomResize").css("display","none");
 				$(".coreWidget-leftResize").css("display","none");
+				$(".coreWidget-rightResize").css("display","none");
 				$(".coreWidget-topRightCornerResize").css("display","none");
 				$(".coreWidget-bottomRightCornerResize").css("display","none");
 				$(".coreWidget-bottomLeftCornerResize").css("display","none");
 				$(".coreWidget-topLeftCornerResize").css("display","none");
+				var newLayouts = [];
+				$(".Core_Theme-CoreWidget").each(function() {
+  					var top = $( this ).position().top,
+  						left = $( this ).position().left,
+  						width = $( this ).width(),
+  						height = $( this ).height(),
+  						widgetName = $(this).attr("widgetName");
+  					newLayouts.splice(newLayouts,0,{"top" : top,"left" : left,"height" : height, "width" : width,"widgetName" : widgetName});
+				});
+				Interstellar.setPresetValue("coreLayouts.layouts",newLayouts);
 			}
 		}
 
