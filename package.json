@@ -46,6 +46,7 @@
     "jsonfile": "^3.0.1",
     "mkdirp": "^0.5.1",
     "node-zip": "^1.1.1",
+    "os": "^0.1.1",
     "replace-in-file": "^2.6.4",
     "say": "^0.11.0",
     "serialport": "^4.0.7",
