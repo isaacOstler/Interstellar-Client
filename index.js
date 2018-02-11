@@ -482,7 +482,7 @@ function initApp() {
                         if (cardLocations[i].name = currentScreen) {
                             var screen = currentScreen.replace(" ", "\ ");
                             //we know this is the right card, lets console.log what we are loading
-                            console.log(mainProcessMessage + "LOADING RESOURCE " + currentScreen + "/" + req.query.path.toString());
+                            console.log(mainProcessMessage + "LOADING RESOURCE " + currentScreen + "/" + req.query.path.toString() + " at path " + (cardFolderLocation + "/" + screen + "/cards/" + screen + "/" + req.query.path));
                             res.sendFile(cardFolderLocation + "/" + screen + "/cards/" + screen + "/" + req.query.path);
                         }
                     }
