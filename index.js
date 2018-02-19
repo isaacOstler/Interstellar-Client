@@ -639,10 +639,11 @@ function initApp() {
                     }
                 })
                 ipc.on("getFileNamesInFolder", function(event, data) {
+                    let originalEvent = event;
                     var path = cardFolderLocation + "/" + data.screen + "/cards/" + data.screen + "/" + data.path;
                     fs.readdir(path, function(err, items) {
                         for (var i = 0; i < items.length; i++) {
-                            event.sender.send("recieveFileNamesInFolder", items);
+                            originalEvent.sender.send("recieveFileNamesInFolder", items);
                         }
                     });
                 });
@@ -767,7 +768,7 @@ function initApp() {
                                     stationBrowser = new BrowserWindow({
                                         width: 800,
                                         height: 480,
-                                        kiosk: false,
+                                        kiosk: true,
                                         backgroundColor: '#2e2c29'
                                     });
                                     isCoreStation = false;
