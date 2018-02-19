@@ -448,6 +448,7 @@ function initApp() {
                                                     width: 800,
                                                     height: 480,
                                                     kiosk: false,
+                                                    textAreasAreResizable : false,
                                                     backgroundColor: 'black'
                                                 });
                                                 isCoreStation = true;
@@ -769,6 +770,8 @@ function initApp() {
                                         width: 800,
                                         height: 480,
                                         kiosk: true,
+                                        devTools : true,
+                                        textAreasAreResizable : false,
                                         backgroundColor: '#2e2c29'
                                     });
                                     isCoreStation = false;

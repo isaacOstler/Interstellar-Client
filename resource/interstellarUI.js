@@ -114,10 +114,11 @@ $(".coreWindowMoveTrigger").mousedown(function(event){
 	});
 });
 
+
 document.addEventListener("keydown", function (e) {
-	if (e.ctrlKey && e.shiftKey && e.which === 73) {
+	if (e.which === 123) {
 		require('remote').getCurrentWindow().toggleDevTools();
-	} else if (e.ctrlKey && e.which === 69) {
+	} else if (e.which === 116) {
 		location.reload();
 	}
 });
