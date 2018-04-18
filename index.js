@@ -33,7 +33,8 @@ var loadingScreen,
     portNumber = 3075,
     serverAddress = "localhost",
     serverPort = 3000,
-    overrideServerAndPort = false;
+    overrideServerAndPort = false,
+    mainProcessMessage = "[" + "INTERSTELLAR CLIENT".prompt + "] ";
 
 if (process.argv.length > 2) {
     portNumber = process.argv[2];
@@ -53,7 +54,6 @@ if (process.argv.length > 5) {
 }
 var interstellarFolder = path.normalize(__dirname + "/../interstellarSupport/");
 
-var mainProcessMessage = "[" + "INTERSTELLAR CLIENT".prompt + "] ";
 console.log(mainProcessMessage + "Checking for required folders...".prompt);
 
 if (!fs.existsSync(interstellarFolder)) {
@@ -769,7 +769,7 @@ function initApp() {
                                     stationBrowser = new BrowserWindow({
                                         width: 800,
                                         height: 480,
-                                        kiosk: true,
+                                        kiosk: false,
                                         devTools : true,
                                         textAreasAreResizable : false,
                                         backgroundColor: '#2e2c29'

@@ -8,6 +8,7 @@ var changeStationScreen;
 var socket;
 var getAdminFunction;
 var serverFunctionManager;
+var oldUpdates = [];
 
 colors.setTheme({
 	silly: 'rainbow',
@@ -36,12 +37,27 @@ module.exports.init = function(clientIPC,createdWindow, webSocket,changeStationS
 			console.log(stationManagerConsolePrefix + "Database Reset!");
 			browserWindow.webContents.send('databaseValueDidReset');
 		}else{
-			console.log(stationManagerConsolePrefix + "New data! " + JSON.stringify(data));
-			browserWindow.webContents.send('databaseValueDidChange',
-			{
-				"key" : data.key,
-				"dataValue" : data.dataValue
-			});
+			console.log(stationManagerConsolePrefix + "New data! [" + data.guid + "] " + data.key + " " + JSON.stringify(data.dataValue));
+			var detected = false;
+			for(var i = 0;i < oldUpdates.length;i++){
+				if(oldUpdates[i] == data.guid){
+					detected = true;
+				}
+			}
+			if(detected){
+				console.log(stationManagerConsolePrefix + "BLOCKING OLD DATA [".input + data.guid.toString().info + "]".input);
+				for(var i = 0;i < oldUpdates.length;i++){
+					if(oldUpdates[i] == data.guid){
+						oldUpdates.splice(i,1);
+					}
+				}
+			}else{
+				browserWindow.webContents.send('databaseValueDidChange',
+				{
+					"key" : data.key,
+					"dataValue" : data.dataValue
+				});
+			}
 		}
 	});
 	console.log(stationManagerConsolePrefix + "did init");
@@ -54,6 +70,12 @@ module.exports.setStation = function(stationName){
 ipc.on('createDatabaseListener',function(event, data){
 	console.log("database listener registered");
 });*/
+function guidGenerator() {
+    var S4 = function() {
+       return (((1+Math.random())*0x10000)|0).toString(16).substring(1);
+   };
+   return (S4()+S4()+"-"+S4()+"-"+S4()+"-"+S4()+"-"+S4()+S4()+S4());
+}
 
 ipc.on('clearDatabase',function(){
 	console.log(stationManagerConsolePrefix + "[" + "CLEAR".error + "] " + "CLEARING DATABASE!".bold.error);
@@ -62,8 +84,16 @@ ipc.on('clearDatabase',function(){
 });
 
 ipc.on('setDatabaseValue',function(event, data){
-	console.log(stationManagerConsolePrefix + "[" + "SET".warn + "] " + JSON.stringify(data));
+	var guid = guidGenerator();
+	console.log(stationManagerConsolePrefix + "[" + "SET".warn + "] [" + guid + "] " + JSON.stringify(data));
+	data.guid = guid;
 	socket.emit("setDatabaseValue",data);
+	browserWindow.webContents.send('databaseValueDidChange',
+	{
+		"key" : data.key,
+		"dataValue" : data.dataValue
+	});
+	oldUpdates.splice(oldUpdates.length,0,guid);
 });
 
 ipc.on('say',function(event,data){
