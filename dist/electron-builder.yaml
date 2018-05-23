@@ -1,6 +1,0 @@
-directories:
-  output: dist
-  buildResources: build
-appId: com.example.app
-target: AppImage
-electronVersion: 1.7.10
