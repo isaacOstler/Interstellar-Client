@@ -7,6 +7,7 @@ var browserWindow;
 var changeStationScreen;
 var socket;
 var getAdminFunction;
+var allowConsoleLogs = false;
 var serverFunctionManager;
 var oldUpdates = [];
 
@@ -37,7 +38,9 @@ module.exports.init = function(clientIPC,createdWindow, webSocket,changeStationS
 			console.log(stationManagerConsolePrefix + "Database Reset!");
 			browserWindow.webContents.send('databaseValueDidReset');
 		}else{
-			console.log(stationManagerConsolePrefix + "New data! [" + data.guid + "] " + data.key + " " + JSON.stringify(data.dataValue));
+			if(allowConsoleLogs){
+				console.log(stationManagerConsolePrefix + "New data! [" + data.guid + "] " + data.key + " " + JSON.stringify(data.dataValue));
+			}
 			var detected = false;
 			for(var i = 0;i < oldUpdates.length;i++){
 				if(oldUpdates[i] == data.guid){
@@ -45,7 +48,9 @@ module.exports.init = function(clientIPC,createdWindow, webSocket,changeStationS
 				}
 			}
 			if(detected){
-				console.log(stationManagerConsolePrefix + "BLOCKING OLD DATA [".input + data.guid.toString().info + "]".input);
+				if(allowConsoleLogs){
+					console.log(stationManagerConsolePrefix + "BLOCKING OLD DATA [".input + data.guid.toString().info + "]".input);
+				}
 				for(var i = 0;i < oldUpdates.length;i++){
 					if(oldUpdates[i] == data.guid){
 						oldUpdates.splice(i,1);
@@ -85,7 +90,9 @@ ipc.on('clearDatabase',function(){
 
 ipc.on('setDatabaseValue',function(event, data){
 	var guid = guidGenerator();
-	console.log(stationManagerConsolePrefix + "[" + "SET".warn + "] [" + guid + "] " + JSON.stringify(data));
+	if(allowConsoleLogs){
+		console.log(stationManagerConsolePrefix + "[" + "SET".warn + "] [" + guid + "] " + JSON.stringify(data));
+	}
 	data.guid = guid;
 	socket.emit("setDatabaseValue",data);
 	browserWindow.webContents.send('databaseValueDidChange',
@@ -94,6 +101,7 @@ ipc.on('setDatabaseValue',function(event, data){
 		"dataValue" : data.dataValue
 	});
 	oldUpdates.splice(oldUpdates.length,0,guid);
+	data = null;
 });
 
 ipc.on('say',function(event,data){
@@ -109,7 +117,9 @@ ipc.on('getDatabaseValue',function(event,data){
 	socket.emit("getDatabaseValue",data);
 	socket.on("databaseValueForKey",function(databaseData){
 	if(databaseData.key == data){
-		console.log(stationManagerConsolePrefix + "[" + "GET".info + "] " + JSON.stringify(databaseData));
+		if(allowConsoleLogs){
+			console.log(stationManagerConsolePrefix + "[" + "GET".info + "] " + JSON.stringify(databaseData));
+		}
 		//console.log("got value '" + databaseData.dataValue + "' for key '" + data + "'");
 		event.returnValue = databaseData.dataValue;
 	}
