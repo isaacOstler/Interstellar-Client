@@ -78,6 +78,12 @@
 	  		"key" : valueName,
 	  		"callback" : callback
 	  	});
+		var ipcRenderer = require('electron').ipcRenderer;
+		var arrayOfKeys = [];
+		for(var i = 0;i < databaseListeners.length;i++){
+			arrayOfKeys.splice(arrayOfKeys.length,0,databaseListeners[i].key);
+		}
+	  	ipcRenderer.send("setDatabaseListeners",arrayOfKeys);
 	  	callback(this.getDatabaseValue(valueName));
 	}
 	/*

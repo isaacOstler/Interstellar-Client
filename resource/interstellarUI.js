@@ -8,7 +8,7 @@ function playRandomBeep(){
 }	
 
 var INTERSTELLAR_UI_CURRENTLY_SELECTED_CORE_WINDOW_DRAGING_TARGET = undefined;
-var INTERSTELLAR_UI_CURRENTLY_SELECTED_CORE_WINDOW_DRAGING_TOP_Z_INDEX = 25555;
+var INTERSTELLAR_UI_CURRENTLY_SELECTED_CORE_WINDOW_DRAGING_TOP_Z_INDEX = 10000;
 //long crazy name in hopes it will never be seen by anybody else's code
 $(".Core_Theme-CoreWidget").append("<div class='coreWidgetMoveContainer'></div>");
 $(".Core_Theme-CoreWidget").append("<div class='coreWidget-topResize'></div>");

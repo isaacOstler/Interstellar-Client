@@ -88,6 +88,10 @@ ipc.on('clearDatabase',function(){
 	socket.emit("clearDatabase");
 });
 
+ipc.on('setDatabaseListeners',function(event,data){
+	socket.emit("setDatabaseListeners",data);
+});
+
 ipc.on('setDatabaseValue',function(event, data){
 	var guid = guidGenerator();
 	if(allowConsoleLogs){
