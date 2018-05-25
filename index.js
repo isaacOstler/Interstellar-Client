@@ -769,7 +769,7 @@ function initApp() {
                                     stationBrowser = new BrowserWindow({
                                         width: 800,
                                         height: 480,
-                                        kiosk: true,
+                                        kiosk: false,
                                         devTools : true,
                                         textAreasAreResizable : false,
                                         backgroundColor: '#2e2c29'
