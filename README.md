@@ -1,3 +1,6 @@
+# Please Note
+This project is no longer maintained.  Please see Interstellar-2.0
+
 # Interstellar-Client
 The client to the interstellar framework, designed to work on any operating system, with any screen size, with any specs
 
