@@ -1,5 +1,8 @@
 # Please Note
-This project is no longer maintained.  Please see Interstellar-2.0
+This project is no longer maintained.  Please *see Interstellar-2.0*.
+
+IMPORTANT:
+There are some *significant* security vulnerabilities present in this version of Interstellar with *no intention of being patched*.  Use at your own risk!
 
 # Interstellar-Client
 The client to the interstellar framework, designed to work on any operating system, with any screen size, with any specs
