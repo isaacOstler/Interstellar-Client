@@ -8,15 +8,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "electron index.js",
     "setup": "electron-rebuild",
-    "build": {
-      "publish": [
-        {
-          "provider": "github",
-          "owner": "isaacOstler",
-          "repo": "https://github.com/isaacOstler/Interstellar-Client.git"
-        }
-      ]
-    }
+    "build": "electron-builder"
   },
   "keywords": [
     "interstellar",
@@ -37,10 +29,8 @@
     "clear-require": "^2.0.0",
     "colors": "^1.2.1",
     "ejs": "^2.5.8",
-    "electron": "^5.0.2",
     "electron-editor-context-menu": "^1.1.1",
     "electron-log": "^2.2.14",
-    "electron-rebuild": "^1.8.5",
     "electron-spell-check-provider": "^1.1.1",
     "electron-updater": "^4.0.6",
     "express": "^4.16.3",
@@ -59,6 +49,8 @@
     "walk": "^2.3.13"
   },
   "devDependencies": {
-    "electron-builder": "^20.42.0"
+    "electron": "^5.0.2",
+    "electron-builder": "^20.42.0",
+    "electron-rebuild": "^1.8.5"
   }
 }

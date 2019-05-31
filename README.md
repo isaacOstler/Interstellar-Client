@@ -13,6 +13,12 @@ The client to the interstellar framework, designed to work on any operating syst
 2) npm run setup
 3) npm run start
 
+<b>Build Instructions</b>
+
+Should you want to build this version of Interstellar, simply run
+
+npm run build
+
 <b>Launching</b>
 
 1) electron index.js (optional, port number) (optional, server IP address) (optional, server port)
