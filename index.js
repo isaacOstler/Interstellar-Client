@@ -449,7 +449,10 @@ function initApp() {
                                                     height: 480,
                                                     kiosk: false,
                                                     textAreasAreResizable : false,
-                                                    backgroundColor: 'black'
+                                                    backgroundColor: 'black',
+                                                    webPreferences : {
+                                                        nodeIntegration : true
+                                                    }
                                                 });
                                                 isCoreStation = true;
                                                 closeAllWindows();
@@ -622,7 +625,10 @@ function initApp() {
                 stationServerSelectWindow = new BrowserWindow({
                     width: 450,
                     height: 200,
-                    frame: true
+                    frame: true,
+                    webPreferences : {
+                        nodeIntegration : true
+                    }
                 });
                 stationServerSelectWindow.setResizable(false);
                 stationServerSelectWindow.loadURL('file://' + __dirname + "/stationServerSelect.html");
@@ -694,7 +700,10 @@ function initApp() {
                     width: 400,
                     height: 400,
                     frame: false,
-                    transparent: true
+                    transparent: true,
+                    webPreferences : {
+                        nodeIntegration : true
+                    }
                 });
                 //load the loading screen on the browser window
                 loadingScreen.loadURL('file://' + __dirname + "/localPublic/loadingStation.html");
@@ -772,7 +781,10 @@ function initApp() {
                                         kiosk: false,
                                         devTools : true,
                                         textAreasAreResizable : false,
-                                        backgroundColor: '#2e2c29'
+                                        backgroundColor: '#2e2c29',
+                                        webPreferences : {
+                                            nodeIntegration : true
+                                        }
                                     });
                                     isCoreStation = false;
                                     serverFunctionManager.init(ipc, stationBrowser, socket, io, colors, changeStationScreen, station);
@@ -856,7 +868,10 @@ function initApp() {
                     height: 400,
                     fullScreen : false,
                     frame: false,
-                    transparent: true
+                    transparent: true,
+                    webPreferences : {
+                        nodeIntegration : true
+                    }
                 });
                 //remove the menu
                 mainWindow.setMenu(null);
@@ -868,7 +883,11 @@ function initApp() {
             }
 
             function openStationOfflineView(callback) {
-                var mainWindow = new BrowserWindow({});
+                var mainWindow = new BrowserWindow({
+                        webPreferences : {
+                            nodeIntegration : true
+                        }
+                    });
                 //load the screen that tells the user not to touch anything
                 mainWindow.setFullScreen(true);
 

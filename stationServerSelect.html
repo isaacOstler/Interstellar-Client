@@ -296,16 +296,6 @@
 <script>
   var ipc = require('electron').ipcRenderer;
 
-/*
-  ipc.send("setAdminPassword","rommel1942!!! Yes");
-    ipc.once("adminPasswordDidWrite",function(event){
-      ipc.send("getAdminPassword");
-      ipc.once("recieveAdminPassword",function(event, password){
-      alert(password);
-    });
-  });
-  */
-
   var serverAddress = "localhost";
   var serverPort = 3000;
   var timePassed = 0;

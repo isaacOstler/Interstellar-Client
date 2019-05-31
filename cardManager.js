@@ -40,7 +40,9 @@ module.exports.init = function(cardLoc, screenLoc, downloadLoc, compressedLoc, t
 	    if(fs.lstatSync(themeFolderLocation).isDirectory()){
 	    	removeAllItemsAndDeleteFolder(themeFolderLocation);
 	    }else{
-	    	fs.unlink(themeFolderLocation);
+	    	fs.unlink(themeFolderLocation, function(){
+
+            });
 	    }
 	}
     console.log("[" + "CARD MANAGER".blue + "] " + "Complete".info);
@@ -49,7 +51,9 @@ module.exports.init = function(cardLoc, screenLoc, downloadLoc, compressedLoc, t
         if(fs.lstatSync(compressedResources).isDirectory()){
             removeAllItemsAndDeleteFolder(themeFolderLocation);
         }else{
-            fs.unlink(compressedResources);
+            fs.unlink(compressedResources,function(){
+
+            });
         }
     }
     console.log("[" + "CARD MANAGER".blue + "] " + "Complete".info);
@@ -64,7 +68,9 @@ function downloadResourceFile(data,callback){
         if(fs.lstatSync(compressedResources).isDirectory()){
             removeAllItemsAndDeleteFolder(compressedResources);
         }else{
-            fs.unlink(compressedResources);
+            fs.unlink(compressedResources,function(){
+
+            });
         }
     }
     var wstream = fs.createWriteStream(compressedResources);
@@ -130,7 +136,9 @@ module.exports.downloadTheme = function(data, callback) {
             } else {
                 //theme has been recieved, and decompressed!  WOOOO
                 console.log("[" + "CARD MANAGER".blue + "] " + "theme downloaded and decompressed");
-	    		fs.unlink(themeFolderLocation);
+	    		fs.unlink(themeFolderLocation, function(){
+
+                });
 	    		callback();
             }
         });
@@ -203,7 +211,9 @@ function removeAllItemsAndDeleteFolder(path) {
             if (fs.lstatSync(curPath).isDirectory()) { // recurse
                 removeAllItemsAndDeleteFolder(curPath);
             } else { // delete file
-                fs.unlinkSync(curPath);
+                fs.unlinkSync(curPath, function(){
+
+                });
             }
         });
         fs.rmdirSync(path);
