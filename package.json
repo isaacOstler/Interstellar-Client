@@ -6,6 +6,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "electron index.js",
+    "setup": "electron-rebuild",
     "build": {
       "publish": [
         {
@@ -30,31 +32,33 @@
   },
   "license": "ISC",
   "dependencies": {
-    "adm-zip": "^0.4.7",
-    "archiver": "^2.1.1",
+    "adm-zip": "^0.4.13",
+    "archiver": "^3.0.0",
     "clear-require": "^2.0.0",
     "colors": "^1.2.1",
     "ejs": "^2.5.8",
+    "electron": "^5.0.2",
     "electron-editor-context-menu": "^1.1.1",
     "electron-log": "^2.2.14",
+    "electron-rebuild": "^1.8.5",
     "electron-spell-check-provider": "^1.1.1",
-    "electron-updater": "^2.21.8",
+    "electron-updater": "^4.0.6",
     "express": "^4.16.3",
     "extract-zip": "^1.6.6",
     "import-fresh": "^2.0.0",
-    "jquery": "^3.3.1",
+    "jquery": "^3.4.1",
     "jsonfile": "^3.0.1",
     "mkdirp": "^0.5.1",
     "node-zip": "^1.1.1",
     "os": "^0.1.1",
     "replace-in-file": "^2.6.4",
     "say": "^0.11.0",
-    "serialport": "^6.2.0",
+    "serialport": "^7.1.5",
     "socket.io": "^2.1.1",
     "socket.io-client": "^2.1.0",
     "walk": "^2.3.13"
   },
   "devDependencies": {
-    "electron-builder": "^20.15.0"
+    "electron-builder": "^20.42.0"
   }
 }
